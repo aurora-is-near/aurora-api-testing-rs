@@ -1,0 +1,23 @@
+[workspace]
+members = [
+    "dao",
+]
+exclude = ["target"]
+
+[workspace.metadata.workspaces]
+version = "0.15.0"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Aurora Labs <info@aurora.dev>"]
+rust-version = "1.64.0"
+description = "Aurora relayer API testing library"
+license = "CC0-1.0"
+readme = "README.md"
+repository = "https://github.com/aurora-is-near/aurora-api-testing-rs"
+homepage = "https://github.com/aurora-is-near/aurora-api-testing-rs"
+keywords = ["aurora", "testing"]
+
+[workspace.dependencies]
+tokio = { version = "1", features = ["full"] }
