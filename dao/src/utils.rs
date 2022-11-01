@@ -1,4 +1,4 @@
-pub mod env_utils {
+pub mod utils {
     pub use std:: { env, path::Path, path::PathBuf };
     pub use dotenv::dotenv;
     pub use std::collections::HashMap;

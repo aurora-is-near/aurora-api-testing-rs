@@ -1,7 +1,7 @@
-pub mod db_client;
-pub mod env_utils;
-use crate::env_utils::env_utils::{ load_env_file, get_env_var, get_full_db_path };
-use crate::db_client::db_client::{ get_db_connection, TestRun };
+pub mod dao;
+pub mod utils;
+use crate::utils::utils::{ load_env_file, get_env_var, get_full_db_path };
+use crate::dao::dao::{ get_db_connection, TestRun };
 
 #[cfg(test)]
 mod tests {
@@ -31,5 +31,6 @@ mod tests {
         assert_eq!(test_run.db_id, 20);
         network_name = get_env_var(&"NETWORK_NAME".to_string()).unwrap();
         assert_eq!(test_run.network, network_name);
+        conn.close();
     }
 }
