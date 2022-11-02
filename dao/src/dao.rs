@@ -1,7 +1,7 @@
 pub mod dao {
     use itertools::Itertools;
-    use std::{path::PathBuf };
     use rusqlite::{Connection, Result};
+    use std::path::PathBuf;
     use tracing::{debug, Level};
     use tracing_subscriber::FmtSubscriber;
 
@@ -14,7 +14,7 @@ pub mod dao {
 
     pub struct TestDataGroup {
         pub db_id: i32,
-        pub data: Vec<TestData>
+        pub data: Vec<TestData>,
     }
 
     pub struct TestTask {
@@ -23,7 +23,7 @@ pub mod dao {
         pub parameters: String,
         pub begin: String,
         pub end: String,
-        pub data_groups: Vec<TestDataGroup>
+        pub data_groups: Vec<TestDataGroup>,
     }
 
     pub struct TestRun {
@@ -54,14 +54,12 @@ pub mod dao {
             let mut stmt = conn.prepare(&test_run_query)?;
             let mut test_run_iter = stmt.query_map([], |row| {
                 let db_id: i32 = row.get::<usize, i32>(0)?;
-                Ok(
-                    TestRun {
-                        db_id: row.get::<usize, i32>(0)?,
-                        id: row.get::<usize, String>(1)?,
-                        network: row.get::<usize, String>(2)?,
-                        tasks: load_test_tasks(conn, db_id).unwrap()
-                    }
-                )
+                Ok(TestRun {
+                    db_id: row.get::<usize, i32>(0)?,
+                    id: row.get::<usize, String>(1)?,
+                    network: row.get::<usize, String>(2)?,
+                    tasks: load_test_tasks(conn, db_id).unwrap(),
+                })
             })?;
             test_run_iter.next().unwrap()
         }
@@ -69,7 +67,7 @@ pub mod dao {
 
     pub fn load_test_tasks(
         conn: &Connection,
-        db_id: i32
+        db_id: i32,
     ) -> Result<Vec<TestTask>, rusqlite::Error> {
         let test_tasks_query = format!(
             "SELECT aurora_relayer_test_tasks.test_task_db_id, test_task_type, test_task_parameters, test_task_begin, test_task_end FROM aurora_relayer_test_runs_x_tasks LEFT JOIN aurora_relayer_test_tasks ON aurora_relayer_test_runs_x_tasks.test_task_db_id = aurora_relayer_test_tasks.test_task_db_id WHERE aurora_relayer_test_runs_x_tasks.test_run_db_id = {} ORDER BY aurora_relayer_test_tasks.test_task_db_id ASC",
@@ -79,16 +77,14 @@ pub mod dao {
         let mut tasks_stmt = conn.prepare(&test_tasks_query)?;
         let tasks_iter = tasks_stmt.query_map([], |row| {
             let db_id: i32 = row.get::<usize, i32>(0)?;
-            Ok(
-                TestTask {
-                    db_id: row.get::<usize, i32>(0)?,
-                    task_type: row.get(1)?,
-                    parameters: row.get(2)?,
-                    begin: row.get(3)?,
-                    end: row.get(4)?,
-                    data_groups: load_test_data_groups(&conn, db_id).unwrap()
-                }
-            )
+            Ok(TestTask {
+                db_id: row.get::<usize, i32>(0)?,
+                task_type: row.get(1)?,
+                parameters: row.get(2)?,
+                begin: row.get(3)?,
+                end: row.get(4)?,
+                data_groups: load_test_data_groups(&conn, db_id).unwrap(),
+            })
         });
         let mut tasks: Vec<TestTask> = Vec::new();
         for task in tasks_iter?.next() {
@@ -99,16 +95,13 @@ pub mod dao {
 
     pub fn load_test_data_groups(
         conn: &Connection,
-        db_id: i32
+        db_id: i32,
     ) -> Result<Vec<TestDataGroup>, rusqlite::Error> {
         let test_data: Vec<TestData> = load_test_data(&conn, db_id).unwrap();
         load_data_groups(test_data)
     }
 
-    pub fn load_test_data(
-        conn: &Connection,
-        db_id: i32
-    ) -> Result<Vec<TestData>, rusqlite::Error> {
+    pub fn load_test_data(conn: &Connection, db_id: i32) -> Result<Vec<TestData>, rusqlite::Error> {
         let test_data_query = format!(
             "SELECT aurora_relayer_test_tasks_x_data.test_task_db_id, test_data_group, test_data_name, test_data_content FROM aurora_relayer_test_tasks_x_data LEFT JOIN aurora_relayer_test_data ON aurora_relayer_test_tasks_x_data.test_data_db_id = aurora_relayer_test_data.test_data_db_id WHERE aurora_relayer_test_tasks_x_data.test_task_db_id = {} ORDER BY aurora_relayer_test_data.test_data_db_id ASC",
             db_id
@@ -116,26 +109,22 @@ pub mod dao {
         debug!("Selecting test data: {}", test_data_query);
         let mut data_stmt = conn.prepare(&test_data_query)?;
         let data_iter = data_stmt.query_map([], |row| {
-            Ok(
-                TestData {
-                    db_id: row.get::<usize, i32>(0)?,
-                    group: row.get(1)?,
-                    name: row.get(2)?,
-                    content: row.get(3)?,
-                }
-            )
+            Ok(TestData {
+                db_id: row.get::<usize, i32>(0)?,
+                group: row.get(1)?,
+                name: row.get(2)?,
+                content: row.get(3)?,
+            })
         });
-        let data = Ok(
-            data_iter?
-                .filter(|res| res.is_ok())
-                .map(|res| res.unwrap())
-                .collect()
-        );
+        let data = Ok(data_iter?
+            .filter(|res| res.is_ok())
+            .map(|res| res.unwrap())
+            .collect());
         data
     }
 
     pub fn load_data_groups(
-        test_data: Vec<TestData>
+        test_data: Vec<TestData>,
     ) -> Result<Vec<TestDataGroup>, rusqlite::Error> {
         let test_data_groups: Vec<TestDataGroup> = test_data
             .iter()
@@ -143,13 +132,16 @@ pub mod dao {
             .into_iter()
             .map(|(id, group)| TestDataGroup {
                 db_id: id,
-                data: group.map(|t| TestData {
-                    db_id: t.db_id,
-                    group: t.group,
-                    name: t.name.clone(),
-                    content: t.content.clone(),
-                }).collect()
-            }).collect();
+                data: group
+                    .map(|t| TestData {
+                        db_id: t.db_id,
+                        group: t.group,
+                        name: t.name.clone(),
+                        content: t.content.clone(),
+                    })
+                    .collect(),
+            })
+            .collect();
         Ok(test_data_groups)
     }
 

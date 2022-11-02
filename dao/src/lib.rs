@@ -1,7 +1,7 @@
 pub mod dao;
 pub mod utils;
-use crate::utils::utils::{ load_env_file, get_env_var, get_full_db_path };
-use crate::dao::dao::{ get_db_connection, TestRun };
+use crate::dao::dao::{get_db_connection, TestRun};
+use crate::utils::utils::{get_env_var, get_full_db_path, load_env_file};
 
 #[cfg(test)]
 mod tests {
@@ -22,8 +22,8 @@ mod tests {
     #[test]
     fn it_loads_test_runs() {
         use std::cmp::Ordering;
-        let mut network_name = get_env_var(&"NETWORK_NAME".to_string())
-            .unwrap_or("mainnet_aurora_plus".to_string());
+        let mut network_name =
+            get_env_var(&"NETWORK_NAME".to_string()).unwrap_or("mainnet_aurora_plus".to_string());
         let full_db_path = get_full_db_path().unwrap();
         let conn = get_db_connection(&full_db_path).unwrap();
         let runs_table = get_env_var(&"RUNS_TABLE".to_string())
