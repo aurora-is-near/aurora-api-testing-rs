@@ -1,6 +1,11 @@
-pub mod dao {
+pub mod transaction_data;
+use crate::dao::data_object::{TestRun, TestTask};
+use crate::dao::transaction_data::{Address, Event, GasUsed, Log, TransactionReceipt};
+
+pub mod data_object {
     use itertools::Itertools;
     use rusqlite::{Connection, Result};
+    use std::error::Error;
     use std::path::PathBuf;
     use tracing::{debug, Level};
     use tracing_subscriber::FmtSubscriber;
@@ -62,6 +67,22 @@ pub mod dao {
                 })
             })?;
             test_run_iter.next().unwrap()
+        }
+
+        pub fn filter_tasks_with_limit_one(
+            self,
+            task_type: String,
+        ) -> Result<TestTask, Box<dyn Error>> {
+            let test_task: Vec<TestTask> = self
+                .tasks
+                .into_iter()
+                .filter(|task| task.task_type == task_type)
+                .map(|task| task)
+                .collect();
+            Ok(test_task
+                .into_iter()
+                .next()
+                .ok_or("Error: empty tasks".to_string())?)
         }
     }
 

@@ -1,6 +1,6 @@
 pub mod dao;
 pub mod utils;
-use crate::dao::dao::{get_db_connection, TestRun};
+use crate::dao::data_object::{get_db_connection, TestRun, TestTask};
 use crate::utils::utils::{get_env_var, get_full_db_path, load_env_file};
 
 #[cfg(test)]
@@ -20,8 +20,10 @@ mod tests {
     }
 
     #[test]
-    fn it_loads_test_runs() {
+    fn it_loads_test_runs_and_filter_tasks() {
         use std::cmp::Ordering;
+        use tracing::{debug, Level};
+        use tracing_subscriber::FmtSubscriber;
         let mut network_name =
             get_env_var(&"NETWORK_NAME".to_string()).unwrap_or("mainnet_aurora_plus".to_string());
         let full_db_path = get_full_db_path().unwrap();
@@ -35,6 +37,18 @@ mod tests {
         let number_of_data_groups = test_run.tasks[0].data_groups.len();
         let result = number_of_data_groups.cmp(&0);
         assert_eq!(Ordering::Greater, result);
+        let task_type = String::from("transferNtimes");
+        let task: TestTask = test_run
+            .filter_tasks_with_limit_one(task_type.clone())
+            .unwrap();
+        assert_eq!(task.task_type, task_type);
+        let subscriber = FmtSubscriber::builder()
+            .with_max_level(Level::TRACE)
+            .finish();
+        debug!(
+            "{}, {}, {}, {}, {}",
+            task.db_id, task.task_type, task.parameters, task.begin, task.end
+        );
         conn.close();
     }
 }
