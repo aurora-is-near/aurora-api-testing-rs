@@ -49,6 +49,16 @@ mod tests {
             "{}, {}, {}, {}, {}",
             task.db_id, task.task_type, task.parameters, task.begin, task.end
         );
+        let data_contents: Vec<String> = task
+            .get_test_data_content_array("receipt".to_string())
+            .unwrap();
+        let mut data_content_by_group_index: String = "".to_string();
+        for i in 0..task.data_groups.len() {
+            data_content_by_group_index = task
+                .get_test_data_content_by_group_index(i, "receipt".to_string())
+                .unwrap();
+            assert_eq!(data_contents[i], data_content_by_group_index);
+        }
         conn.close();
     }
 }

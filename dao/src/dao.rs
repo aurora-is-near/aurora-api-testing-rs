@@ -10,6 +10,7 @@ pub mod data_object {
     use tracing::{debug, Level};
     use tracing_subscriber::FmtSubscriber;
 
+    #[derive(Clone)]
     pub struct TestData {
         pub db_id: i32,
         pub group: i32,
@@ -29,6 +30,39 @@ pub mod data_object {
         pub begin: String,
         pub end: String,
         pub data_groups: Vec<TestDataGroup>,
+    }
+
+    impl TestTask {
+        pub fn get_test_data_content_by_group_index(
+            &self,
+            data_group_index: usize,
+            test_data_name: String,
+        ) -> Result<String, Box<dyn Error>> {
+            let test_grp: &Vec<TestData> = &self.data_groups[data_group_index].data;
+            let test_data: Vec<String> = test_grp
+                .into_iter()
+                .filter(|d| d.name == test_data_name)
+                .map(|t| t.content.clone())
+                .collect();
+            Ok(test_data.iter().next().unwrap().to_string())
+        }
+
+        pub fn get_test_data_content_array(
+            &self,
+            test_data_name: String,
+        ) -> Result<Vec<String>, Box<dyn Error>> {
+            let test_grps: &Vec<TestDataGroup> = &self.data_groups;
+            let test_data: Vec<String> = test_grps
+                .into_iter()
+                .flat_map(|grp| {
+                    grp.data
+                        .iter()
+                        .filter(|d| d.name == test_data_name)
+                        .map(|c| c.content.clone())
+                })
+                .collect();
+            Ok(test_data)
+        }
     }
 
     pub struct TestRun {
