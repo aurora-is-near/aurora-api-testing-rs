@@ -1,6 +1,6 @@
 pub mod dao;
 pub mod utils;
-use crate::dao::data_object::{get_db_connection, TestRun, TestTask};
+use crate::dao::helpers::{get_db_connection, TestRun, TestTask};
 use crate::utils::utils::{get_env_var, get_full_db_path, load_env_file};
 
 #[cfg(test)]

@@ -1,4 +1,4 @@
-mod transaction_data {
+mod models {
     pub use ethereum_types::Address;
 
     pub struct GasUsed {
@@ -51,4 +51,4 @@ mod transaction_data {
     }
 }
 
-pub use transaction_data::{Address, Event, GasUsed, Log, TransactionReceipt};
+pub use models::{Address, Event, GasUsed, Log, TransactionReceipt};
