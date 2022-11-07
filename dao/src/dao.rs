@@ -1,40 +1,56 @@
 pub mod models;
-use crate::dao::helpers::{Address, Event, GasUsed, Log, TransactionReceipt};
-use crate::dao::models::{get_db_connection, TestRun, TestTask};
+#[macro_use]
 
-mod helpers {
+pub mod helpers {
     pub use ethereum_types::Address;
+    pub use serde::{Deserialize, Serialize};
+    pub use serde_json::{Error as SerdeError, Value};
+    pub use std::error::Error;
+    extern crate serde;
+    extern crate serde_derive;
+    extern crate serde_json;
+    use tracing::debug;
 
+    #[derive(Serialize, Deserialize, Debug)]
+    #[serde(rename_all(serialize = "snake_case", deserialize = "camelCase"))]
     pub struct GasUsed {
-        gas_type: String,
-        hex: String,
+        #[serde(rename = "type")]
+        pub gas_type: String,
+        pub hex: String,
     }
 
+    #[derive(Serialize, Deserialize, Debug)]
+    #[serde(rename_all(serialize = "snake_case", deserialize = "camelCase"))]
     pub struct Log {
-        transaction_index: i32,
-        block_number: i32,
-        transaction_hash: String,
-        address: Address,
-        topics: Vec<String>,
-        data: String,
-        log_index: i32,
-        block_hash: String,
+        pub transaction_index: i32,
+        pub block_number: i32,
+        pub transaction_hash: String,
+        pub address: Address,
+        pub topics: Vec<String>,
+        pub data: String,
+        pub log_index: i32,
+        pub block_hash: String,
     }
 
+    #[derive(Serialize, Deserialize, Debug)]
+    #[serde(rename_all(serialize = "snake_case", deserialize = "camelCase"))]
     pub struct Event {
-        transaction_index: i32,
-        block_number: i32,
-        transaction_hash: String,
-        address: Address,
-        topics: Vec<String>,
-        data: String,
-        log_index: i32,
-        block_hash: String,
-        args: Vec<String>,
-        event: String,
-        event_signature: String,
+        pub transaction_index: i32,
+        pub block_number: i32,
+        pub transaction_hash: String,
+        pub address: Address,
+        pub topics: Vec<String>,
+        pub data: String,
+        pub log_index: i32,
+        pub block_hash: String,
+        #[serde(skip_deserializing)] //TODO: fix deserialization of events args
+        pub args: Vec<String>,
+        pub event: String,
+        pub event_signature: String,
     }
 
+    #[derive(Serialize, Deserialize, Debug)]
+    #[serde(rename_all(serialize = "snake_case", deserialize = "camelCase"))]
     pub struct TransactionReceipt {
         pub from: Address,
         pub to: Address,
@@ -44,17 +60,28 @@ mod helpers {
         pub logs_bloom: String,
         pub block_hash: String,
         pub transaction_hash: String,
+        #[serde(default, rename = "logs")]
         pub logs: Vec<Log>,
         pub block_number: i32,
         pub confirmations: i32,
         pub cumulative_gas_used: GasUsed,
         pub status: i32,
+        #[serde(rename = "type")]
         pub transaction_type: i32,
         pub byzantium: bool,
+        #[serde(default, rename = "events")]
         pub events: Vec<Event>,
     }
 
     impl TransactionReceipt {
-        pub fn load() {}
+        pub fn load(data: Vec<String>) -> Result<Vec<TransactionReceipt>, Box<dyn Error>> {
+            let receipts = data
+                .into_iter()
+                .map(|r: String| -> TransactionReceipt {
+                    serde_json::from_str(&r.clone()).unwrap()
+                })
+                .collect();
+            Ok(receipts)
+        }
     }
 }

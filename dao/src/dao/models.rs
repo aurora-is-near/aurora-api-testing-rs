@@ -158,11 +158,6 @@ pub mod models {
                 runs_table.as_str(),
                 network_name.as_str()
             ).clone();
-            let subscriber = FmtSubscriber::builder()
-                .with_max_level(Level::TRACE)
-                .finish();
-            tracing::subscriber::set_global_default(subscriber)
-                .expect("setting default subscriber failed");
             debug!("Selecting test runs: {}", test_run_query);
             let mut stmt = conn.prepare(&test_run_query)?;
             let mut test_run_iter = stmt.query_map([], |row| {
