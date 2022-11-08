@@ -8,6 +8,14 @@ authors.workspace = true
 
 [dependencies]
 dao = { path = "../dao", default-features = false}
+anyhow.workspace = true
+jsonrpsee-http-client.workspace = true
+jsonrpsee-core.workspace = true
+jsonrpsee-types.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+num-bigint.workspace = true
 
 [[test]]
 name = "integration_tests"
