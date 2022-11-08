@@ -76,15 +76,19 @@ mod tests {
         let data_contents: Vec<String> = task
             .get_test_data_content_array("receipt".to_string())
             .unwrap();
+        let number_of_data_contents = data_contents.len();
         let subscriber = FmtSubscriber::builder()
             .with_max_level(Level::TRACE)
             .finish();
         tracing::subscriber::set_global_default(subscriber)
             .expect("setting default subscriber failed");
+        debug!("{}", data_contents[0]);
         let receipts = TransactionReceipt::load(data_contents).unwrap();
-        debug!("Receipt: {:?}", receipts[0]);
+        // debug!("{:?}", receipts[0].events[0].args);
+        debug!("Number of receipts: {:?}", receipts.len());
         let number_of_receipts = receipts.len();
         let result = number_of_receipts.cmp(&0);
         assert_eq!(Ordering::Greater, result);
+        assert_eq!(number_of_receipts, number_of_data_contents);
     }
 }

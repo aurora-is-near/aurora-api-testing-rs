@@ -43,8 +43,8 @@ pub mod helpers {
         pub data: String,
         pub log_index: i32,
         pub block_hash: String,
-        #[serde(skip_deserializing)] //TODO: fix deserialization of events args
-        pub args: Vec<String>,
+        // #[serde(skip_deserializing)] //TODO: fix deserialization of events args
+        pub args: Vec<Value>,
         pub event: String,
         pub event_signature: String,
     }
@@ -74,8 +74,10 @@ pub mod helpers {
     }
 
     impl TransactionReceipt {
-        pub fn load(data: Vec<String>) -> Result<Vec<TransactionReceipt>, Box<dyn Error>> {
-            let receipts = data
+        pub fn load(
+            raw_transactions_data: Vec<String>,
+        ) -> Result<Vec<TransactionReceipt>, SerdeError> {
+            let receipts = raw_transactions_data
                 .into_iter()
                 .map(|r: String| -> TransactionReceipt {
                     serde_json::from_str(&r.clone()).unwrap()
