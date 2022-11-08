@@ -9,7 +9,6 @@ pub mod helpers {
     extern crate serde;
     extern crate serde_derive;
     extern crate serde_json;
-    use tracing::debug;
 
     #[derive(Serialize, Deserialize, Debug)]
     #[serde(rename_all(serialize = "snake_case", deserialize = "camelCase"))]
@@ -43,7 +42,6 @@ pub mod helpers {
         pub data: String,
         pub log_index: i32,
         pub block_hash: String,
-        // #[serde(skip_deserializing)] //TODO: fix deserialization of events args
         pub args: Vec<Value>,
         pub event: String,
         pub event_signature: String,

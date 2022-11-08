@@ -1,12 +1,12 @@
 pub mod dao;
 pub mod utils;
-use crate::dao::helpers::TransactionReceipt;
-use crate::dao::models::{get_db_connection, TestRun, TestTask};
-use crate::utils::utils::{get_env_var, get_full_db_path, load_env_file};
 
+// local tests for this lib
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use crate::dao::helpers::TransactionReceipt;
+    use crate::dao::models::{get_db_connection, TestRun, TestTask};
+    use crate::utils::utils::{get_env_var, get_full_db_path, load_env_file};
     use std::cmp::Ordering;
     use tracing::{debug, Level};
     use tracing_subscriber::FmtSubscriber;
@@ -82,7 +82,7 @@ mod tests {
             .finish();
         tracing::subscriber::set_global_default(subscriber)
             .expect("setting default subscriber failed");
-        debug!("{}", data_contents[0]);
+        // debug!("{}", data_contents[0]);
         let receipts = TransactionReceipt::load(data_contents).unwrap();
         // debug!("{:?}", receipts[0].events[0].args);
         debug!("Number of receipts: {:?}", receipts.len());
