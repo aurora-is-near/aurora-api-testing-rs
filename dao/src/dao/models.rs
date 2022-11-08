@@ -3,8 +3,7 @@ pub mod models {
     use rusqlite::{Connection, Result};
     use std::error::Error;
     use std::path::PathBuf;
-    use tracing::{debug, Level};
-    use tracing_subscriber::FmtSubscriber;
+    use tracing::debug;
 
     #[derive(Clone)]
     pub struct TestData {

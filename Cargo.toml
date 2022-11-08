@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "dao",
+    "dynamic_apis_tests",
 ]
 exclude = ["target"]
 

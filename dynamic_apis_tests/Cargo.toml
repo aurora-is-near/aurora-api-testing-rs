@@ -1,0 +1,14 @@
+[package]
+name = "dynamic_apis_tests"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+dao = { path = "../dao", default-features = false}
+
+[[test]]
+name = "integration_tests"
+path = "tests/lib.rs"
