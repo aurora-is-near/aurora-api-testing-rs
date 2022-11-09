@@ -9,15 +9,14 @@ use std::i64;
 use tracing::{info, Level};
 use tracing_subscriber::FmtSubscriber;
 
+#[path = "configs.rs"]
+mod configs;
+use configs::Configs;
+
 #[tokio::test]
 async fn test_eth_block_number() -> anyhow::Result<()> {
-    let network_name =
-        get_env_var(&"NETWORK_NAME".to_string()).unwrap_or("mainnet_aurora_plus".to_string());
-    let full_db_path = get_full_db_path().unwrap();
-    let conn = get_db_connection(&full_db_path).unwrap();
-    let runs_table =
-        get_env_var(&"RUNS_TABLE".to_string()).unwrap_or("aurora_relayer_test_runs".to_string());
-    let test_run = TestRun::new(&conn, network_name, runs_table).unwrap();
+    let configs = Configs::load().unwrap();
+    let test_run = TestRun::new(&configs.conn, configs.network, configs.runs_table).unwrap();
     let task: TestTask = test_run
         .filter_tasks_with_limit_one("transferNtimes".to_string())
         .unwrap();
@@ -25,10 +24,7 @@ async fn test_eth_block_number() -> anyhow::Result<()> {
         .get_test_data_content_array("receipt".to_string())
         .unwrap();
     let receipts = TransactionReceipt::load(data_contents).unwrap();
-    let rpc_url = get_env_var(&"RPC_URL".to_string()).unwrap();
-    let api_key = get_env_var(&"API_KEY".to_string()).unwrap();
-    let url = format!("{}{}", rpc_url, api_key);
-    let client = http_client::HttpClientBuilder::default().build(url)?;
+    let client = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
     let subscriber = FmtSubscriber::builder()
         .with_max_level(Level::INFO)
         .finish();

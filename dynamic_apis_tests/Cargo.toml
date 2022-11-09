@@ -12,11 +12,15 @@ anyhow.workspace = true
 jsonrpsee-http-client.workspace = true
 jsonrpsee-core.workspace = true
 jsonrpsee-types.workspace = true
+ethereum-types.workspace = true
 tokio.workspace = true
 tracing.workspace = true
 tracing-subscriber.workspace = true
 num-bigint.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+rusqlite.workspace = true
 
 [[test]]
-name = "integration_tests"
+name = "integration"
 path = "tests/lib.rs"
