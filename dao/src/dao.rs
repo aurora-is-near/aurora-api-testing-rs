@@ -123,7 +123,7 @@ pub mod helpers {
         pub nonce: String,
         pub r: String,
         pub s: String,
-        pub to: Address,
+        pub to: Option<Address>,
         pub transaction_index: String,
         pub v: String,
         pub value: String,
