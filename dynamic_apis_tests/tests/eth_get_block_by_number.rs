@@ -14,10 +14,10 @@ mod configs;
 use configs::Configs;
 
 #[tokio::test]
-async fn test_eth_get_block_by_hash() -> anyhow::Result<()> {
+async fn test_eth_get_block_by_number() -> anyhow::Result<()> {
     let configs = Configs::load().unwrap();
     let subscriber = FmtSubscriber::builder()
-        .with_max_level(Level::TRACE)
+        .with_max_level(Level::INFO)
         .finish();
     tracing::subscriber::set_global_default(subscriber);
     let test_run = TestRun::new(&configs.conn, configs.network, configs.runs_table).unwrap();
@@ -30,10 +30,10 @@ async fn test_eth_get_block_by_hash() -> anyhow::Result<()> {
     let receipts = TransactionReceipt::load(data_contents).unwrap();
     let client = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
     for i in 0..receipts.len() {
-        info!("block hash: {}", receipts[i].block_hash.clone());
-        let params = rpc_params![receipts[i].block_hash.clone(), true];
+        info!("block number: {}", receipts[i].block_number);
+        let params = rpc_params![receipts[i].block_number.to_string(), true];
         let response: Result<BlockWithTransactionReceipts, _> =
-            client.request("eth_getBlockByHash", params).await;
+            client.request("eth_getBlockByNumber", params).await;
         let block = response.unwrap();
         assert_eq!(block.hash, receipts[i].block_hash);
         assert_eq!(
