@@ -19,9 +19,9 @@ keywords = ["aurora", "testing"]
 
 [workspace.dependencies]
 anyhow = { version = "1.0", default-features = false }
-jsonrpsee-http-client = "0.15.1"
-jsonrpsee-core= "0.15.1"
-jsonrpsee-types = "0.15.1"
+jsonrpsee-http-client = "0.16.0"
+jsonrpsee-core= "0.16.0"
+jsonrpsee-types = "0.16.0"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 tracing = "0.1"
 tracing-subscriber = "0.2.0"
