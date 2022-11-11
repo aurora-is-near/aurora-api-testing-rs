@@ -1,12 +1,12 @@
-use dao::dao::helpers::TransactionReceipt;
+use dao::dao::helpers::{BlockWithTransactionReceipts, TransactionReceipt};
 use dao::dao::models::{get_db_connection, TestRun, TestTask};
 use dao::utils::utils::{get_env_var, get_full_db_path};
-use jsonrpsee_core::{client::ClientT, Error, JsonRawValue};
 use jsonrpsee_core::rpc_params;
+use jsonrpsee_core::{client::ClientT, JsonRawValue};
 use jsonrpsee_http_client as http_client;
 use std::cmp::Ordering;
 use std::i64;
-use tracing::{info, debug, Level};
+use tracing::{debug, info, Level};
 use tracing_subscriber::FmtSubscriber;
 
 #[path = "configs.rs"]
@@ -30,12 +30,23 @@ async fn test_eth_block_number() -> anyhow::Result<()> {
     let receipts = TransactionReceipt::load(data_contents).unwrap();
     let client = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
     for i in 0..receipts.len() {
-        info!("Receipt block hash: {}", receipts[i].block_hash.clone());
-        let include_tx_object = true;
-        let block_hash = receipts[i].block_hash.clone();
-        let params = rpc_params![block_hash, include_tx_object];
-        let response: Result<String, _> = client.request("eth_getBlockByHash", params).await;
-        debug!("r: {:?}", response);
+        info!("block hash: {}", receipts[i].block_hash.clone());
+        let params = rpc_params![receipts[i].block_hash.clone(), true];
+        let response: Result<BlockWithTransactionReceipts, _> =
+            client.request("eth_getBlockByHash", params).await;
+        let block = response.unwrap();
+        assert_eq!(block.hash, receipts[i].block_hash);
+        assert_eq!(
+            i32::from_str_radix(&block.number[2..block.number.len()], 16).unwrap(),
+            receipts[i].block_number
+        );
+        let tx_hashes: Vec<String> = block
+            .transactions
+            .into_iter()
+            .filter(|t| t.hash == receipts[i].transaction_hash)
+            .map(|t| t.hash)
+            .collect();
+        assert_eq!(tx_hashes[0], receipts[i].transaction_hash);
     }
     Ok(())
 }

@@ -87,7 +87,7 @@ pub mod helpers {
 
     #[derive(Serialize, Deserialize, Debug)]
     #[serde(rename_all(serialize = "snake_case", deserialize = "camelCase"))]
-    pub struct BlockWithTransactionReceipts  {
+    pub struct BlockWithTransactionReceipts {
         pub difficulty: String,
         pub extra_data: String,
         pub gas_limit: String,
@@ -107,7 +107,7 @@ pub mod helpers {
         pub total_difficulty: String,
         pub transactions: Vec<Transaction>,
         pub transactionsRoot: H256,
-        pub uncles: Vec<String>
+        pub uncles: Vec<String>,
     }
 
     #[derive(Serialize, Deserialize, Debug)]
@@ -118,7 +118,7 @@ pub mod helpers {
         pub from: Address,
         pub gas: String,
         pub gas_price: String,
-        pub hash: H256,
+        pub hash: String,
         pub input: String,
         pub nonce: String,
         pub r: String,
