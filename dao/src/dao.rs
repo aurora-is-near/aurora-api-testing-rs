@@ -95,7 +95,7 @@ pub mod helpers {
         pub hash: String,
         pub logs_bloom: String,
         pub miner: Address,
-        pub mix_Hash: H256,
+        pub mix_hash: H256,
         pub nonce: String,
         pub number: String,
         pub parent_hash: H256,
@@ -106,7 +106,7 @@ pub mod helpers {
         pub timestamp: String,
         pub total_difficulty: String,
         pub transactions: Vec<Transaction>,
-        pub transactionsRoot: H256,
+        pub transactions_root: H256,
         pub uncles: Vec<String>,
     }
 
