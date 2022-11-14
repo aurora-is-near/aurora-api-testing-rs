@@ -11,3 +11,5 @@ mod eth_get_block_by_number;
 mod eth_get_block_transaction_count_by_hash;
 mod eth_get_block_transaction_count_by_number;
 mod eth_get_code;
+mod eth_get_compilers;
+mod eth_get_filter_changes;
