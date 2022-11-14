@@ -17,7 +17,7 @@ use configs::Configs;
 async fn test_eth_get_block_by_hash() -> anyhow::Result<()> {
     let configs = Configs::load().unwrap();
     let subscriber = FmtSubscriber::builder()
-        .with_max_level(Level::TRACE)
+        .with_max_level(Level::INFO)
         .finish();
     tracing::subscriber::set_global_default(subscriber);
     let test_run = TestRun::new(&configs.conn, configs.network, configs.runs_table).unwrap();
