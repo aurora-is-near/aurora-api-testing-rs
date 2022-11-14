@@ -9,3 +9,4 @@ mod eth_get_balance;
 mod eth_get_block_by_hash;
 mod eth_get_block_by_number;
 mod eth_get_block_transaction_count_by_hash;
+mod eth_get_block_transaction_count_by_number;
