@@ -15,7 +15,6 @@ mod configs;
 use configs::Configs;
 
 #[derive(Serialize, Deserialize, Debug)]
-// #[serde(rename_all(serialize = "snake_case", deserialize = "camelCase"))]
 struct LogFilter {
     topics: Vec<String>,
     address: String,
