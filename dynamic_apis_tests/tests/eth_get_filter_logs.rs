@@ -9,7 +9,7 @@ mod configs;
 use configs::Configs;
 
 #[tokio::test]
-async fn test_eth_get_code() -> anyhow::Result<()> {
+async fn test_eth_get_filter_logs() -> anyhow::Result<()> {
     let subscriber = FmtSubscriber::builder()
         .with_max_level(Level::INFO)
         .finish();

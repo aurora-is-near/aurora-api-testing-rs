@@ -24,7 +24,7 @@ pub mod helpers {
         pub transaction_index: i32,
         pub block_number: i32,
         pub transaction_hash: String,
-        pub address: Address,
+        pub address: String,
         pub topics: Vec<String>,
         pub data: String,
         pub log_index: i32,
