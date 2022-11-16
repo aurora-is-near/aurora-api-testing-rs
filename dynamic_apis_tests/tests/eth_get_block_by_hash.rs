@@ -1,0 +1,52 @@
+use dao::dao::helpers::{BlockWithTransactionReceipts, TransactionReceipt};
+use dao::dao::models::{get_db_connection, TestRun, TestTask};
+use dao::utils::utils::{get_env_var, get_full_db_path};
+use jsonrpsee_core::rpc_params;
+use jsonrpsee_core::{client::ClientT, JsonRawValue};
+use jsonrpsee_http_client as http_client;
+use std::cmp::Ordering;
+use std::i64;
+use tracing::{debug, info, Level};
+use tracing_subscriber::FmtSubscriber;
+
+#[path = "configs.rs"]
+mod configs;
+use configs::Configs;
+
+#[tokio::test]
+async fn test_eth_get_block_by_hash() -> anyhow::Result<()> {
+    let configs = Configs::load().unwrap();
+    let subscriber = FmtSubscriber::builder()
+        .with_max_level(Level::INFO)
+        .finish();
+    tracing::subscriber::set_global_default(subscriber);
+    let test_run = TestRun::new(&configs.conn, configs.network, configs.runs_table).unwrap();
+    let task: TestTask = test_run
+        .filter_tasks_with_limit_one("transferNtimes".to_string())
+        .unwrap();
+    let data_contents: Vec<String> = task
+        .get_test_data_content_array("receipt".to_string())
+        .unwrap();
+    let receipts = TransactionReceipt::load(data_contents).unwrap();
+    let client = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
+    for i in 0..receipts.len() {
+        info!("block hash: {}", receipts[i].block_hash.clone());
+        let params = rpc_params![receipts[i].block_hash.clone(), true];
+        let response: Result<BlockWithTransactionReceipts, _> =
+            client.request("eth_getBlockByHash", params).await;
+        let block = response.unwrap();
+        assert_eq!(block.hash, receipts[i].block_hash);
+        assert_eq!(
+            i32::from_str_radix(&block.number[2..block.number.len()], 16).unwrap(),
+            receipts[i].block_number
+        );
+        let tx_hashes: Vec<String> = block
+            .transactions
+            .into_iter()
+            .filter(|t| t.hash == receipts[i].transaction_hash)
+            .map(|t| t.hash)
+            .collect();
+        assert_eq!(tx_hashes[0], receipts[i].transaction_hash);
+    }
+    Ok(())
+}
