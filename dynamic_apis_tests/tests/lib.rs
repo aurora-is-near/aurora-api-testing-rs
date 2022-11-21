@@ -15,3 +15,4 @@ mod eth_get_compilers;
 mod eth_get_filter_changes;
 mod eth_get_logs;
 mod eth_get_storage_at;
+mod eth_get_transaction_by_hash;

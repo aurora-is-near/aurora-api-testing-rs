@@ -113,7 +113,7 @@ pub mod helpers {
     #[derive(Serialize, Deserialize, Debug)]
     #[serde(rename_all(serialize = "snake_case", deserialize = "camelCase"))]
     pub struct Transaction {
-        pub block_hash: H256,
+        pub block_hash: String,
         pub block_number: String,
         pub from: Address,
         pub gas: String,
