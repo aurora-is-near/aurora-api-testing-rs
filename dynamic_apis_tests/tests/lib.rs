@@ -18,3 +18,4 @@ mod eth_get_storage_at;
 mod eth_get_transaction_by_block_hash_and_index;
 mod eth_get_transaction_by_block_number_and_index;
 mod eth_get_transaction_by_hash;
+mod eth_get_transaction_count;
