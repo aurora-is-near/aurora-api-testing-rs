@@ -1,4 +1,3 @@
-use dao::dao::models::{TestRun, TestTask};
 use dao::utils::utils::get_env_var;
 use jsonrpsee_core::client::ClientT;
 use jsonrpsee_core::rpc_params;

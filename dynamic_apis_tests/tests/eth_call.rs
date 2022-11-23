@@ -3,7 +3,6 @@ use jsonrpsee_core::client::ClientT;
 use jsonrpsee_core::rpc_params;
 use jsonrpsee_http_client as http_client;
 use serde::{Deserialize, Serialize};
-use serde_json;
 use tracing::{info, Level};
 use tracing_subscriber::FmtSubscriber;
 

@@ -23,6 +23,7 @@ async fn test_eth_chain_id() -> anyhow::Result<()> {
     let result = response.unwrap();
     let chain_id = i64::from_str_radix(&result[2..result.len()], 16).unwrap();
     let res = chain_id.cmp(&0);
+    info!("chain_id: {:?}", chain_id);
     assert_eq!(Ordering::Greater, res);
     Ok(())
 }

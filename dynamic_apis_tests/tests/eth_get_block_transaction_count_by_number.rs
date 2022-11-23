@@ -1,5 +1,5 @@
 use dao::dao::helpers::{BlockWithTransactionReceipts, TransactionReceipt};
-use dao::dao::models::{get_db_connection, TestRun, TestTask};
+use dao::dao::models::{TestRun, TestTask};
 use dao::utils::utils::{get_env_var, get_full_db_path};
 use ethereum_types::{H160, H256};
 use jsonrpsee_core::rpc_params;
@@ -7,7 +7,7 @@ use jsonrpsee_core::{client::ClientT, JsonRawValue};
 use jsonrpsee_http_client as http_client;
 use std::cmp::Ordering;
 use std::i64;
-use tracing::{debug, info, Level};
+use tracing::{info, Level};
 use tracing_subscriber::FmtSubscriber;
 
 #[path = "configs.rs"]
