@@ -19,7 +19,7 @@ mod aurora_transaction_receipt;
 use aurora_transaction_receipt::AuroraTransactionReceipt;
 
 #[tokio::test]
-async fn test_eth_get_transaction_by_hash() -> anyhow::Result<()> {
+async fn test_eth_get_transaction_receipt() -> anyhow::Result<()> {
     let subscriber = FmtSubscriber::builder()
         .with_max_level(Level::INFO)
         .finish();
