@@ -10,6 +10,10 @@ use tracing_subscriber::FmtSubscriber;
 mod configs;
 use configs::Configs;
 
+#[path = "utils.rs"]
+mod utils;
+use utils::hex_string_to_i32;
+
 #[path = "aurora_transaction_receipt.rs"]
 mod aurora_transaction_receipt;
 use aurora_transaction_receipt::AuroraTransactionReceipt;
@@ -19,7 +23,7 @@ async fn test_eth_get_transaction_by_hash() -> anyhow::Result<()> {
     let subscriber = FmtSubscriber::builder()
         .with_max_level(Level::INFO)
         .finish();
-    tracing::subscriber::set_global_default(subscriber);
+    let _t = tracing::subscriber::set_global_default(subscriber);
     let configs = Configs::load().unwrap();
     let test_run = TestRun::new(&configs.conn, configs.network, configs.runs_table).unwrap();
     let task: TestTask = test_run
@@ -32,20 +36,63 @@ async fn test_eth_get_transaction_by_hash() -> anyhow::Result<()> {
             .unwrap();
         let transactions = TransactionReceipt::load(vec![receipt]).unwrap();
         let params = rpc_params![transactions[0].transaction_hash.clone()];
-        info!(
-            "Transaction receipt: {:?}",
-            transactions[0].transaction_hash.to_string()
-        );
         let response: Result<AuroraTransactionReceipt, _> =
             client.request("eth_getTransactionReceipt", params).await;
         let res = response.unwrap();
-        info!("result: {:?}", res);
+        // transaction hash
         assert_eq!(res.transaction_hash, transactions[0].transaction_hash);
+        // block hash
         assert_eq!(res.block_hash, transactions[0].block_hash);
-        let on_chain_block_number =
-            i32::from_str_radix(&res.block_number[2..res.block_number.len()], 16).unwrap();
-        assert_eq!(on_chain_block_number, transactions[0].block_number);
+        // block number
+        assert_eq!(
+            hex_string_to_i32(res.block_number),
+            transactions[0].block_number
+        );
+        // logs bloom
         // assert_eq!(res.logs_bloom, transactions[0].logs_bloom); //TODO: this assertion is not working !
+        // gas used
+        assert_eq!(res.gas_used, transactions[0].gas_used.hex);
+        // transaction hash
+        assert_eq!(res.transaction_hash, transactions[0].transaction_hash);
+        // transaction index
+        // TODO: some transaction indices are not correct
+        // assert_eq!(
+        //     i32::from_str_radix(&res.transaction_index[2..res.transaction_index.len()], 16).unwrap(),
+        //     transactions[0].transaction_index);
+        // transaction logs
+        for i in 0..res.logs.len() {
+            info!("Result log: {:?}", res.logs[i]);
+            assert_eq!(
+                res.logs[i].address,
+                transactions[0].logs[i].address.to_lowercase()
+            );
+            // TODO: transaction index is inconsistent
+            // assert_eq!(
+            //     i32::from_str_radix(&res.logs[i].transaction_index[2..res.logs[i].transaction_index.len()], 16).unwrap(),
+            //     transactions[0].logs[i].transaction_index
+            // );
+            assert_eq!(
+                res.logs[i].block_hash.clone(),
+                transactions[0].logs[i].block_hash
+            );
+            assert_eq!(
+                hex_string_to_i32(res.logs[i].block_number.clone()),
+                transactions[0].logs[i].block_number
+            );
+            assert_eq!(
+                hex_string_to_i32(res.logs[i].log_index.clone()),
+                transactions[0].logs[i].log_index
+            );
+            assert_eq!(
+                res.logs[i].topics.len(),
+                transactions[0].logs[i].topics.len()
+            );
+            assert_eq!(res.logs[i].data, transactions[0].logs[i].data);
+            assert_eq!(
+                res.logs[i].transaction_hash,
+                transactions[0].logs[i].transaction_hash
+            );
+        }
     }
     Ok(())
 }
