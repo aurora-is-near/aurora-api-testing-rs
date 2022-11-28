@@ -41,6 +41,7 @@ async fn test_eth_get_transaction_receipt() -> anyhow::Result<()> {
         let res = response.unwrap();
         // transaction hash
         assert_eq!(res.transaction_hash, transactions[0].transaction_hash);
+        info!("transaction hash: {}", res.transaction_hash.clone());
         // block hash
         assert_eq!(res.block_hash, transactions[0].block_hash);
         // block number
@@ -49,48 +50,61 @@ async fn test_eth_get_transaction_receipt() -> anyhow::Result<()> {
             transactions[0].block_number
         );
         // logs bloom
-        // assert_eq!(res.logs_bloom, transactions[0].logs_bloom); //TODO: this assertion is not working !
+        assert_eq!(res.logs_bloom, transactions[0].logs_bloom);
+        // contract address
+        assert_eq!(res.contract_address, transactions[0].contract_address);
         // gas used
         assert_eq!(res.gas_used, transactions[0].gas_used.hex);
-        // transaction hash
-        assert_eq!(res.transaction_hash, transactions[0].transaction_hash);
+        // cumulative gas used
+        assert_eq!(
+            hex_string_to_i32(res.cumulative_gas_used),
+            hex_string_to_i32(transactions[0].cumulative_gas_used.hex.clone())
+        );
+
+        // Status
+        assert_eq!(hex_string_to_i32(res.status), transactions[0].status);
         // transaction index
-        // TODO: some transaction indices are not correct
-        // assert_eq!(
-        //     i32::from_str_radix(&res.transaction_index[2..res.transaction_index.len()], 16).unwrap(),
-        //     transactions[0].transaction_index);
+        let on_chain_tx_index = hex_string_to_i32(res.transaction_index);
+        let off_chain_tx_index = transactions[0].transaction_index;
+        assert_eq!(on_chain_tx_index, off_chain_tx_index);
         // transaction logs
         for i in 0..res.logs.len() {
-            info!("Result log: {:?}", res.logs[i]);
+            // address
             assert_eq!(
                 res.logs[i].address,
                 transactions[0].logs[i].address.to_lowercase()
             );
-            // TODO: transaction index is inconsistent
-            // assert_eq!(
-            //     i32::from_str_radix(&res.logs[i].transaction_index[2..res.logs[i].transaction_index.len()], 16).unwrap(),
-            //     transactions[0].logs[i].transaction_index
-            // );
+            // block hash
             assert_eq!(
                 res.logs[i].block_hash.clone(),
                 transactions[0].logs[i].block_hash
             );
+            // block number
             assert_eq!(
                 hex_string_to_i32(res.logs[i].block_number.clone()),
                 transactions[0].logs[i].block_number
             );
+            // data
+            assert_eq!(res.logs[i].data, transactions[0].logs[i].data);
+            // log index
             assert_eq!(
                 hex_string_to_i32(res.logs[i].log_index.clone()),
                 transactions[0].logs[i].log_index
             );
+            // topics length
             assert_eq!(
                 res.logs[i].topics.len(),
                 transactions[0].logs[i].topics.len()
             );
-            assert_eq!(res.logs[i].data, transactions[0].logs[i].data);
+            // topics
+            assert_eq!(res.logs[i].topics, transactions[0].logs[i].topics);
             assert_eq!(
                 res.logs[i].transaction_hash,
                 transactions[0].logs[i].transaction_hash
+            );
+            assert_eq!(
+                hex_string_to_i32(res.logs[i].transaction_index.clone()),
+                transactions[0].logs[i].transaction_index
             );
         }
     }
