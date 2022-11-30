@@ -16,7 +16,7 @@ mod tests {
         let vars = load_env_file();
         assert_eq!(
             vars.get(&"RPC_URL".to_string()),
-            Some(&"https://mainnet.aurora.dev:443/".to_string())
+            Some(&"mainnet.aurora.dev:443/".to_string())
         );
         assert_eq!(
             vars.get(&"NETWORK_NAME".to_string()),
