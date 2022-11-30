@@ -1,4 +1,4 @@
-use dao::dao::helpers::{Transaction, TransactionReceipt};
+use dao::dao::helpers::TransactionReceipt;
 use dao::dao::models::{TestRun, TestTask};
 use jsonrpsee_core::client::ClientT;
 use jsonrpsee_core::rpc_params;
@@ -17,7 +17,7 @@ async fn test_eth_get_transaction_count() -> anyhow::Result<()> {
     let subscriber = FmtSubscriber::builder()
         .with_max_level(Level::INFO)
         .finish();
-    tracing::subscriber::set_global_default(subscriber);
+    let _ = tracing::subscriber::set_global_default(subscriber);
     let configs = Configs::load().unwrap();
     let test_run = TestRun::new(&configs.conn, configs.network, configs.runs_table).unwrap();
     let task: TestTask = test_run

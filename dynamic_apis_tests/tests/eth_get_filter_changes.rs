@@ -13,7 +13,7 @@ async fn test_eth_get_filter_changes() -> anyhow::Result<()> {
     let subscriber = FmtSubscriber::builder()
         .with_max_level(Level::INFO)
         .finish();
-    tracing::subscriber::set_global_default(subscriber);
+    let _ = tracing::subscriber::set_global_default(subscriber);
     let configs = Configs::load().unwrap();
     let client = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
     let params = rpc_params!["0x0"];
