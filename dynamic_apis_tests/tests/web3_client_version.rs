@@ -1,12 +1,18 @@
-use tracing::{info, Level};
-use tracing_subscriber::FmtSubscriber;
+use jsonrpsee_core::client::ClientT;
+use jsonrpsee_core::rpc_params;
+use jsonrpsee_http_client as http_client;
+
+#[path = "configs.rs"]
+mod configs;
+use configs::Configs;
 
 #[tokio::test]
 async fn test_web3_client_version() -> anyhow::Result<()> {
-    let subscriber = FmtSubscriber::builder()
-        .with_max_level(Level::INFO)
-        .finish();
-    let _t = tracing::subscriber::set_global_default(subscriber);
-    info!("web3_clientVersion is not supported in Aurora");
+    let configs = Configs::load().unwrap();
+    let client = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
+    let params = rpc_params![];
+    let response: Result<String, _> = client.request("web3_clientVersion", params).await;
+    let result = response.unwrap();
+    assert_eq!(result, configs.client_version);
     Ok(())
 }

@@ -9,6 +9,8 @@ pub struct Configs {
     pub conn: Connection,
     pub runs_table: String,
     pub chain_id: String,
+    pub client_version: String,
+    pub protocol_version: String,
 }
 
 impl Configs {
@@ -19,6 +21,8 @@ impl Configs {
         let url = format!("{}{}", rpc_url, api_key);
         let full_db_path = get_full_db_path().unwrap();
         let chain_id = get_env_var(&"CHAIN_ID".to_string()).unwrap();
+        let client_version = get_env_var(&"CLIENT_VERSION".to_string()).unwrap();
+        let protocol_version = get_env_var(&"PROTOCOL_VERSION".to_string()).unwrap();
         Ok(Configs {
             rpc_url: url,
             wss_url: wss_rpc_url,
@@ -28,6 +32,8 @@ impl Configs {
             runs_table: get_env_var(&"RUNS_TABLE".to_string())
                 .unwrap_or("aurora_relayer_test_runs".to_string()),
             chain_id,
+            client_version,
+            protocol_version,
         })
     }
 }

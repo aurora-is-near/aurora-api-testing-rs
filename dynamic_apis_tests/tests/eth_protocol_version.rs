@@ -23,7 +23,7 @@ async fn test_eth_protocol_version() -> anyhow::Result<()> {
     let params = rpc_params![];
     let response: Result<String, _> = client.request("eth_protocolVersion", params).await;
     let protocol_version = hex_string_to_i32(response.unwrap());
-    assert_eq!(protocol_version, 65);
+    assert_eq!(protocol_version.to_string(), configs.protocol_version);
     info!("eth_protocolVersion is: {}", protocol_version);
     Ok(())
 }
