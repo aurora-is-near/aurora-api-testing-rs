@@ -36,18 +36,14 @@ async fn test_eth_get_transaction_by_block_number_and_index() -> anyhow::Result<
             .request("eth_getTransactionByBlockNumberAndIndex", params)
             .await;
         let res = response.unwrap();
-        if res.is_some() {
-            // TODO: clean up the transaction data in the database
-            // TODO: some transactions are not found in the specified block hash.
-            info!(
-                "result: {:?}, block number: {}, transactionIndex: {}",
-                res, transactions[0].block_number, transactions[0].transaction_index
-            );
-            assert_eq!(
-                res.unwrap().block_number,
-                format!("0x{:x}", transactions[0].block_number)
-            );
-        }
+        info!(
+            "result: {:?}, block number: {}, transactionIndex: {}",
+            res, transactions[0].block_number, transactions[0].transaction_index
+        );
+        assert_eq!(
+            res.unwrap().block_number,
+            format!("0x{:x}", transactions[0].block_number)
+        );
         last_block_number = transactions[0].block_number;
     }
     info!("assert no transaction @ invalid block hash");

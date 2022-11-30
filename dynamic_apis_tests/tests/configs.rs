@@ -27,7 +27,7 @@ impl Configs {
             conn: get_db_connection(&full_db_path).unwrap(),
             runs_table: get_env_var(&"RUNS_TABLE".to_string())
                 .unwrap_or("aurora_relayer_test_runs".to_string()),
-            chain_id
+            chain_id,
         })
     }
 }
