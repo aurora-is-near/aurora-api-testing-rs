@@ -12,6 +12,15 @@ jobs:
     runs-on: ubuntu-latest
     env:
       API_KEY: ${{secrets.API_KEY}}
+      CHAIN_ID: ${{secrets.CHAIN_ID}}
+      RPC_URL: ${{secrets.RPC_URL}}
+      NETWORK_NAME: ${{secrets.NETWORK_NAME}}
+      DB_FILE_PATH: ${{secrets.DB_FILE_PATH}}
+      RUNS_TABLE: ${{secrets.RUNS_TABLE}}
+      TASKS_TABLE: ${{secrets.TASKS_TABLE}}
+      DATA_TABLE: ${{secrets.DATA_TABLE}}
+      RUNS_X_TASKS_TABLE: ${{secrets.RUNS_X_TASKS_TABLE}}
+      TASKS_X_DATA_TABLE: ${{secrets.TASKS_X_DATA_TABLE}}
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
