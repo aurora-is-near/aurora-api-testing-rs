@@ -43,7 +43,7 @@ cargo test
 cargo test --test <TEST_NAME>
 ```
 
-### Linting
+### Styling
 ```bash
 cargo fmt --all -- --check
 ```
