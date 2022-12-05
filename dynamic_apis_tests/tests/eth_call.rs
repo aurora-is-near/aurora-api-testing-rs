@@ -3,7 +3,6 @@ use jsonrpsee_core::client::ClientT;
 use jsonrpsee_core::rpc_params;
 use jsonrpsee_http_client as http_client;
 use serde::{Deserialize, Serialize};
-use serde_json;
 use tracing::{info, Level};
 use tracing_subscriber::FmtSubscriber;
 
@@ -28,7 +27,7 @@ async fn test_eth_call() -> anyhow::Result<()> {
     let subscriber = FmtSubscriber::builder()
         .with_max_level(Level::INFO)
         .finish();
-    tracing::subscriber::set_global_default(subscriber);
+    let _ = tracing::subscriber::set_global_default(subscriber);
     let configs = Configs::load().unwrap();
     let test_run = TestRun::new(&configs.conn, configs.network, configs.runs_table).unwrap();
     let task: TestTask = test_run

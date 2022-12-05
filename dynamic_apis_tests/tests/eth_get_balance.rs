@@ -1,6 +1,5 @@
 use dao::dao::helpers::TransactionReceipt;
-use dao::dao::models::{get_db_connection, TestRun, TestTask};
-use dao::utils::utils::{get_env_var, get_full_db_path};
+use dao::dao::models::{TestRun, TestTask};
 use jsonrpsee_core::client::ClientT;
 use jsonrpsee_core::rpc_params;
 use jsonrpsee_http_client as http_client;
@@ -17,7 +16,7 @@ async fn test_eth_get_balance() -> anyhow::Result<()> {
     let subscriber = FmtSubscriber::builder()
         .with_max_level(Level::INFO)
         .finish();
-    tracing::subscriber::set_global_default(subscriber);
+    let _ = tracing::subscriber::set_global_default(subscriber);
     let configs = Configs::load().unwrap();
     let client = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
     let test_run = TestRun::new(&configs.conn, configs.network, configs.runs_table).unwrap();

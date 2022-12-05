@@ -1,12 +1,9 @@
-use dao::dao::helpers::{Log, TransactionReceipt};
+use dao::dao::helpers::TransactionReceipt;
 use dao::dao::models::{get_db_connection, TestRun, TestTask};
-use dao::utils::utils::{get_env_var, get_full_db_path};
 use jsonrpsee_core::client::ClientT;
 use jsonrpsee_core::rpc_params;
 use jsonrpsee_http_client as http_client;
 use serde::{Deserialize, Serialize};
-use serde_json;
-use std::i64;
 use tracing::{info, Level};
 use tracing_subscriber::FmtSubscriber;
 
@@ -14,12 +11,17 @@ use tracing_subscriber::FmtSubscriber;
 mod configs;
 use configs::Configs;
 
+#[path = "utils.rs"]
+mod utils;
+use utils::hex_string_to_i32;
+
 #[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
 struct LogFilter {
     topics: Vec<String>,
     address: String,
-    fromBlock: String,
-    toBlock: String,
+    from_block: String,
+    to_block: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -41,7 +43,7 @@ async fn test_eth_get_logs() -> anyhow::Result<()> {
     let subscriber = FmtSubscriber::builder()
         .with_max_level(Level::INFO)
         .finish();
-    tracing::subscriber::set_global_default(subscriber);
+    let _ = tracing::subscriber::set_global_default(subscriber);
     let configs = Configs::load().unwrap();
     let client = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
     let test_run = TestRun::new(&configs.conn, configs.network, configs.runs_table).unwrap();
@@ -58,8 +60,8 @@ async fn test_eth_get_logs() -> anyhow::Result<()> {
             let log_filter = LogFilter {
                 topics: vec![topics[0].clone()],
                 address: log.address.to_string(),
-                fromBlock: log.block_number.to_string().clone(),
-                toBlock: log.block_number.to_string().clone(),
+                from_block: log.block_number.to_string().clone(),
+                to_block: log.block_number.to_string().clone(),
             };
             let params = rpc_params![log_filter];
             info!(
@@ -74,11 +76,7 @@ async fn test_eth_get_logs() -> anyhow::Result<()> {
                 assert_eq!(log_result.address, log.address.to_lowercase());
                 // block number
                 assert_eq!(
-                    i32::from_str_radix(
-                        &log_result.block_number[2..log_result.block_number.len()],
-                        16
-                    )
-                    .unwrap(),
+                    hex_string_to_i32(log_result.block_number.clone()),
                     log.block_number
                 );
                 // block hash
@@ -89,8 +87,7 @@ async fn test_eth_get_logs() -> anyhow::Result<()> {
                 }
                 // log index
                 assert_eq!(
-                    i32::from_str_radix(&log_result.log_index[2..log_result.log_index.len()], 16)
-                        .unwrap(),
+                    hex_string_to_i32(log_result.log_index.clone()),
                     log.log_index
                 );
                 // transaction hash
@@ -98,10 +95,10 @@ async fn test_eth_get_logs() -> anyhow::Result<()> {
                 // transaction data
                 assert_eq!(log_result.data, log.data);
                 // transaction index
-                // assert_eq!(
-                //     i32::from_str_radix(&log_result.transaction_index[2..log_result.transaction_index.len()], 16).unwrap(),
-                //     log.transaction_index
-                // );
+                assert_eq!(
+                    hex_string_to_i32(log_result.transaction_index.clone()),
+                    log.transaction_index
+                );
             }
             info!("onchain log:{:?} ", res);
         }

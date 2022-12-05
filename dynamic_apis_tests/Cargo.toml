@@ -10,6 +10,7 @@ authors.workspace = true
 dao = { path = "../dao", default-features = false}
 anyhow.workspace = true
 jsonrpsee-http-client.workspace = true
+jsonrpsee-ws-client.workspace = true
 jsonrpsee-core.workspace = true
 jsonrpsee-types.workspace = true
 ethereum-types.workspace = true

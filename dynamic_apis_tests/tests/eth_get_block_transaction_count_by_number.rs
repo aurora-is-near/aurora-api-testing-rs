@@ -1,13 +1,11 @@
-use dao::dao::helpers::{BlockWithTransactionReceipts, TransactionReceipt};
-use dao::dao::models::{get_db_connection, TestRun, TestTask};
-use dao::utils::utils::{get_env_var, get_full_db_path};
-use ethereum_types::{H160, H256};
+use dao::dao::helpers::TransactionReceipt;
+use dao::dao::models::{TestRun, TestTask};
+use jsonrpsee_core::client::ClientT;
 use jsonrpsee_core::rpc_params;
-use jsonrpsee_core::{client::ClientT, JsonRawValue};
 use jsonrpsee_http_client as http_client;
 use std::cmp::Ordering;
 use std::i64;
-use tracing::{debug, info, Level};
+use tracing::{info, Level};
 use tracing_subscriber::FmtSubscriber;
 
 #[path = "configs.rs"]
@@ -20,7 +18,7 @@ async fn test_eth_get_block_transaction_count_by_number() -> anyhow::Result<()> 
     let subscriber = FmtSubscriber::builder()
         .with_max_level(Level::INFO)
         .finish();
-    tracing::subscriber::set_global_default(subscriber);
+    let _ = tracing::subscriber::set_global_default(subscriber);
     let test_run = TestRun::new(&configs.conn, configs.network, configs.runs_table).unwrap();
     let task: TestTask = test_run
         .filter_tasks_with_limit_one("transferNtimes".to_string())
