@@ -30,10 +30,7 @@ mod tests {
             get_env_var(&"NETWORK_NAME".to_string()).unwrap_or("mainnet_aurora_plus".to_string());
         let full_db_path = get_full_db_path().unwrap();
         let conn = get_db_connection(&full_db_path).unwrap();
-        let runs_table = get_env_var(&"RUNS_TABLE".to_string())
-            .unwrap_or("aurora_relayer_test_runs".to_string());
-        let test_run = TestRun::new(&conn, network_name, runs_table).unwrap();
-        // assert_eq!(test_run.db_id, 22);
+        let test_run = TestRun::new(&conn, network_name).unwrap();
         network_name = get_env_var(&"NETWORK_NAME".to_string()).unwrap();
         assert_eq!(test_run.network, network_name);
         let number_of_data_groups = test_run.tasks[0].data_groups.len();
@@ -44,7 +41,6 @@ mod tests {
             .filter_tasks_with_limit_one(task_type.clone())
             .unwrap();
         assert_eq!(task.task_type, task_type);
-
         debug!(
             "{}, {}, {}, {}, {}",
             task.db_id, task.task_type, task.parameters, task.begin, task.end
@@ -67,9 +63,7 @@ mod tests {
             get_env_var(&"NETWORK_NAME".to_string()).unwrap_or("mainnet_aurora_plus".to_string());
         let full_db_path = get_full_db_path().unwrap();
         let conn = get_db_connection(&full_db_path).unwrap();
-        let runs_table = get_env_var(&"RUNS_TABLE".to_string())
-            .unwrap_or("aurora_relayer_test_runs".to_string());
-        let test_run = TestRun::new(&conn, network_name, runs_table).unwrap();
+        let test_run = TestRun::new(&conn, network_name).unwrap();
         let task = test_run
             .filter_tasks_with_limit_one("transferNtimes".to_string())
             .unwrap();

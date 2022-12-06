@@ -5,6 +5,8 @@ pub mod models {
     use std::path::PathBuf;
     use tracing::debug;
 
+    const RUNS_TABLE: &str = "aurora_relayer_test_runs";
+
     #[derive(Clone)]
     pub struct TestData {
         pub db_id: i32,
@@ -146,15 +148,11 @@ pub mod models {
     }
 
     impl TestRun {
-        pub fn new(
-            conn: &Connection,
-            network_name: String,
-            runs_table: String,
-        ) -> Result<TestRun, rusqlite::Error> {
+        pub fn new(conn: &Connection, network_name: String) -> Result<TestRun, rusqlite::Error> {
             //TODO: use https://github.com/SeaQL/sea-query/ for more user friendly queries formatting
             let test_run_query = format!(
                 "SELECT * FROM {} WHERE test_run_network = '{}' ORDER BY test_run_db_id DESC LIMIT 1",
-                runs_table.as_str(),
+                RUNS_TABLE,
                 network_name.as_str()
             ).clone();
             debug!("Selecting test runs: {}", test_run_query);
