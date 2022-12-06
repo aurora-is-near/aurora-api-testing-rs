@@ -15,20 +15,11 @@ Refer to this [official installation page](https://www.rust-lang.org/tools/insta
 
 Before you use this repo, you must configure the following environment variables
 ```bash
-# DEFAULT ENV VARIABLES
-# rpc env vars
 RPC_URL="mainnet.aurora.dev:443/"
-API_KEY=""
-# database env vars
-DB_FILE_PATH="db/test-data.sqlite3"
+AURORA_PLUS_API_KEY=""
 NETWORK_NAME="mainnet_aurora_plus"
-RUNS_TABLE="aurora_relayer_test_runs"
-TASKS_TABLE="aurora_relayer_test_tasks"
-DATA_TABLE="aurora_relayer_test_data"
-RUNS_X_TASKS_TABLE="aurora_relayer_test_runs_x_tasks"
-TASKS_X_DATA_TABLE="aurora_relayer_test_tasks_x_data"
 ```
-The `API_KEY` is needed to execute some special test cases. If you don't have
+The `AURORA_PLUS_API_KEY` is needed to execute some special test cases. If you don't have
 one, please create a new account on [Aurora+](https://aurora.plus/).
 
 ## Tests
