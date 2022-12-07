@@ -15,7 +15,7 @@ use configs::Configs;
 #[tokio::test]
 async fn test_eth_block_number() -> anyhow::Result<()> {
     let configs = Configs::load().unwrap();
-    let test_run = TestRun::new(&configs.conn, configs.network, configs.runs_table).unwrap();
+    let test_run = TestRun::new(&configs.conn, configs.network).unwrap();
     let task: TestTask = test_run
         .filter_tasks_with_limit_one("transferNtimes".to_string())
         .unwrap();

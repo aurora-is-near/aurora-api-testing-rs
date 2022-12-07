@@ -21,7 +21,7 @@ async fn test_eth_get_uncle_by_block_number_and_index() -> anyhow::Result<()> {
         .with_max_level(Level::INFO)
         .finish();
     let _ = tracing::subscriber::set_global_default(subscriber);
-    let test_run = TestRun::new(&configs.conn, configs.network, configs.runs_table).unwrap();
+    let test_run = TestRun::new(&configs.conn, configs.network).unwrap();
     let task: TestTask = test_run
         .filter_tasks_with_limit_one("transferNtimes".to_string())
         .unwrap();
