@@ -36,3 +36,9 @@ serde_derive = "1.0"
 serde_with = { version = "1.4.0", features = ["json"]}
 num-bigint = { version = "0.4", default-features = false }
 hex = "0.4"
+ethers-core = "1.0.2"
+ethers-providers = "1.0.2"
+ethers-signers = "1.0.2"
+ethers-middleware = "1.0.2"
+ethers-contract = "1.0.2"
+futures = "0.3.25"
