@@ -29,3 +29,4 @@ ethers-signers.workspace = true
 ethers-middleware.workspace = true
 ethers-contract.workspace = true
 futures.workspace = true
+serial_test.workspace = true

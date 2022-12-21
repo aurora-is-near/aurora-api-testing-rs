@@ -53,7 +53,12 @@ impl SmartContract {
         let client = std::sync::Arc::new(signer);
         let factory = ContractFactory::new(self.abi.clone(), self.bytecode.clone(), client);
         let deployer = factory.deploy(args.unwrap())?;
-        let deployed_contract = deployer.clone().legacy().send().await?;
+        let deployed_contract = deployer
+            .clone()
+            .confirmations(1usize)
+            .legacy()
+            .send()
+            .await?;
         Ok(deployed_contract.address())
     }
 
