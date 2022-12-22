@@ -102,13 +102,13 @@ async fn test_eth_send_raw_transaction_wtm() -> anyhow::Result<()> {
         .get_test_data_content_by_group_index(0, "destination_private_key".to_string())
         .unwrap();
     let deployer_private_key = task
-        .get_test_data_content_by_group_index(0, "deployer_private_key".to_string())
+        .get_test_data_content_by_group_index(1, "destination_private_key".to_string())
         .unwrap();
     let destination_address = task
         .get_test_data_content_by_group_index(0, "destination_address".to_string())
         .unwrap();
     let deployer_address = task
-        .get_test_data_content_by_group_index(0, "deployer_address".to_string())
+        .get_test_data_content_by_group_index(1, "destination_address".to_string())
         .unwrap();
     // deploy
     let abi = utils::read_abi_from_json_file("tests/abis/watermelonToken.json").unwrap();
@@ -245,7 +245,7 @@ async fn test_eth_send_raw_transaction_wtm() -> anyhow::Result<()> {
         .call::<_, i32>(
             contract_address,
             "balanceOf",
-            Some(Token::Address(receiver.clone())),
+            Some(to.clone()),
             signer.clone(),
         )
         .await
