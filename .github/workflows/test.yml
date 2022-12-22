@@ -15,6 +15,14 @@ jobs:
       RPC_URL: ${{secrets.RPC_URL}}
       NETWORK_NAME: ${{secrets.NETWORK_NAME}}
     steps:
+      - name: Clone DB repository
+        uses: actions/checkout@v3
+        with:
+          repository: aurora-is-near/relayer-test-data-generator
+          token: ${{ secrets.GH_TOKEN }}
+          path: relayer-test-data-generator
+          ref: main
+
       - name: Checkout sources
         uses: actions/checkout@v3
 
