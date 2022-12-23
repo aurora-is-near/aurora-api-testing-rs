@@ -11,19 +11,20 @@ jobs:
     name: Tests
     runs-on: ubuntu-latest
     env:
-      API_KEY: ${{secrets.API_KEY}}
-      CHAIN_ID: ${{secrets.CHAIN_ID}}
+      AURORA_PLUS_API_KEY: ${{secrets.AURORA_PLUS_API_KEY}}
       RPC_URL: ${{secrets.RPC_URL}}
-      CLIENT_VERSION: ${{secrets.CLIENT_VERSION}}
-      PROTOCOL_VERSION: ${{secrets.PROTOCOL_VERSION}}
       NETWORK_NAME: ${{secrets.NETWORK_NAME}}
-      DB_FILE_PATH: ${{secrets.DB_FILE_PATH}}
-      RUNS_TABLE: ${{secrets.RUNS_TABLE}}
-      TASKS_TABLE: ${{secrets.TASKS_TABLE}}
-      DATA_TABLE: ${{secrets.DATA_TABLE}}
-      RUNS_X_TASKS_TABLE: ${{secrets.RUNS_X_TASKS_TABLE}}
-      TASKS_X_DATA_TABLE: ${{secrets.TASKS_X_DATA_TABLE}}
     steps:
+      - name: Clone the repository
+        uses: actions/checkout@v2
+      - name: Clone DB repository
+        uses: actions/checkout@v3
+        with:
+          repository: aurora-is-near/relayer-test-data-generator
+          token: ${{ secrets.SSH_RELAYER_TEST_DATA_GENERATOR }}
+          path: relayer-test-data-generator
+          ref: main
+
       - name: Checkout sources
         uses: actions/checkout@v3
 
@@ -37,4 +38,4 @@ jobs:
           cache-on-failure: true
 
       - name: cargo test
-        run: cargo test --all --all-features
+        run: cp .env.example .env ; source .env; export AURORA_PLUS_API_KEY=${{secrets.AURORA_PLUS_API_KEY}}; cargo test --all --all-features
