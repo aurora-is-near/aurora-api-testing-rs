@@ -23,7 +23,7 @@ pub mod utils {
     }
 
     pub fn get_full_db_path() -> Option<PathBuf> {
-        let db_dir = format!("../db/test-data.sqlite3");
+        let db_dir = format!("../../relayer-test-data-generator/db/test-data.sqlite3");
         Some(Path::join(
             env::current_dir().unwrap().as_path(),
             Path::new(&db_dir).to_str().unwrap(),
