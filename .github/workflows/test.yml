@@ -27,22 +27,19 @@ jobs:
           ref: main
       - name: Install Datadog-ci
         run: |
-          cd go-ethereum/dynamic
           npm install --save-dev @datadog/datadog-ci
-      - name: Install rust-junit-report
+      - name: Install junit-report
         run: |
-          go install github.com/jstemmer/go-junit-report/v2@latest
+          cargo install cargo2junit
       - name: Checkout sources
         uses: actions/checkout@v3
-
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-
       - uses: Swatinem/rust-cache@v1
         with:
           cache-on-failure: true
-
       - name: cargo test
-        run: cp .env.example .env ; source .env; export AURORA_PLUS_API_KEY=${{secrets.AURORA_PLUS_API_KEY}}; cargo test --all --all-features
+        run: |
+          cp .env.example .env ; source .env; export AURORA_PLUS_API_KEY=${{secrets.AURORA_PLUS_API_KEY}}; cargo test -- -Z unstable-options --format json --report-time | cargo2junit > results.xml

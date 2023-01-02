@@ -36,3 +36,4 @@ serde_derive = "1.0"
 serde_with = { version = "1.4.0", features = ["json"]}
 num-bigint = { version = "0.4", default-features = false }
 hex = "0.4"
+cargo2junit = "0.1.12"
