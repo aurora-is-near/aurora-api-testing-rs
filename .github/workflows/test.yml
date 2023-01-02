@@ -25,6 +25,9 @@ jobs:
           ssh-key: ${{ secrets.SSH_RELAYER_TEST_DATA_GENERATOR }}
           path: relayer-test-data-generator
           ref: main
+      - name: Move db to the working directory
+        run: |
+          mv relayer-test-data-generator/ ../
       - name: Install Datadog-ci
         run: |
           npm install --save-dev @datadog/datadog-ci
