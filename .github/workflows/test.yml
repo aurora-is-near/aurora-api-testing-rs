@@ -47,4 +47,4 @@ jobs:
         run: |
           cp .env.example .env ; source .env; export AURORA_PLUS_API_KEY=${{secrets.AURORA_PLUS_API_KEY}}; cargo test -- -Z unstable-options --format json --report-time | cargo2junit > results.xml
           npm install --save-dev @datadog/datadog-ci
-          DD_ENV=ci DATADOG_SITE=datadoghq.eu npx datadog-ci junit upload --service "aurora-relayer-api-dynamic-tests-aplus-mainnet-rs" report.xml 
+          DD_ENV=ci DATADOG_SITE=datadoghq.eu npx datadog-ci junit upload --service "aurora-relayer-api-dynamic-tests-aplus-mainnet-rs" results.xml 
