@@ -1,0 +1,49 @@
+name: Dynamic Aurora API Testing
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    env:
+      AURORA_PLUS_API_KEY: ${{secrets.AURORA_PLUS_API_KEY}}
+      RPC_URL: ${{secrets.RPC_URL}}
+      NETWORK_NAME: ${{secrets.NETWORK_NAME}}
+      DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout@v2
+      - name: Clone DB repository
+        uses: actions/checkout@v3
+        with:
+          repository: aurora-is-near/relayer-test-data-generator
+          ssh-key: ${{ secrets.SSH_RELAYER_TEST_DATA_GENERATOR }}
+          path: relayer-test-data-generator
+          ref: main
+      - name: Move db to the working directory
+        run: |
+          mv relayer-test-data-generator/ ../
+
+      - name: Install junit-report
+        run: |
+          cargo install cargo2junit
+      - name: Checkout sources
+        uses: actions/checkout@v3
+
+      - name: Install toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - uses: Swatinem/rust-cache@v1
+        with:
+          cache-on-failure: true
+
+      - name: cargo test & upload results
+        run: |
+          cp .env.example .env ; source .env; export AURORA_PLUS_API_KEY=${{secrets.AURORA_PLUS_API_KEY}}; cargo test -- -Z unstable-options --format json --report-time | cargo2junit > results.xml
+          npm install --save-dev @datadog/datadog-ci
+          DD_ENV=ci DATADOG_SITE=datadoghq.eu npx datadog-ci junit upload --service "aurora-relayer-api-dynamic-tests-aplus-mainnet-rs" results.xml 
