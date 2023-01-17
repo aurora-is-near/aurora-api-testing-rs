@@ -16,7 +16,7 @@ pub struct Configs {
 
 impl Configs {
     pub fn load() -> Result<Configs, rusqlite::Error> {
-        let rpc_url = format!("https://{}", get_env_var(&"RPC_URL".to_string()).unwrap());
+        let rpc_url = format!("{}", get_env_var(&"RPC_URL".to_string()).unwrap());
         let wss_rpc_url = format!("wss://{}", get_env_var(&"RPC_URL".to_string()).unwrap());
         let api_key = get_env_var(&"AURORA_PLUS_API_KEY".to_string()).unwrap();
         let url = format!("{}{}", rpc_url, api_key);
