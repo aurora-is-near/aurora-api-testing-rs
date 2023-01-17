@@ -15,7 +15,7 @@ Refer to this [official installation page](https://www.rust-lang.org/tools/insta
 
 Before you use this repo, you must configure the following environment variables
 ```bash
-RPC_URL="mainnet.aurora.dev:443/"
+RPC_URL="https://mainnet.aurora.dev:443/"
 AURORA_PLUS_API_KEY=""
 NETWORK_NAME="mainnet_aurora_plus"
 ```
