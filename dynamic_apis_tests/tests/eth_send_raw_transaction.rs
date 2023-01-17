@@ -57,6 +57,7 @@ async fn test_eth_send_raw_transaction_increment() -> anyhow::Result<()> {
     );
     // call (value)
     let signer = signer_wallet.create().unwrap();
+    let signer_address = signer.address().to_string();
     let contract_address = contract.deploy(Some(()), signer).await.unwrap();
     info!("Increment contract Address: {:?}", contract_address);
     let signer = signer_wallet.create().unwrap();

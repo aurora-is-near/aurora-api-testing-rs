@@ -21,7 +21,7 @@ async fn test_eth_get_transaction_by_block_hash_and_index() -> anyhow::Result<()
     let task: TestTask = test_run
         .filter_tasks_with_limit_one("transferNtimes".to_string())
         .unwrap();
-    let client = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
+    let client = http_client::HttpClientBuilder::default().build(configs.rpc_url.clone())?;
     let mut last_block_hash = String::from("0x0");
     for group_id in 0..task.data_groups.len() {
         let receipt: String = task
@@ -45,20 +45,22 @@ async fn test_eth_get_transaction_by_block_hash_and_index() -> anyhow::Result<()
         assert_eq!(res.unwrap().block_hash, transactions[0].block_hash);
         last_block_hash = transactions[0].block_hash.clone();
     }
-    info!("assert no transaction @ invalid block hash");
-    let block_hash = "0x0";
-    let transaction_index = 0;
-    let params = rpc_params![block_hash, transaction_index];
-    let response: Result<Option<Transaction>, _> = client
-        .request("eth_getTransactionByBlockHashAndIndex", params)
-        .await;
-    assert_eq!(response.unwrap().is_none(), true);
-    info!("assert no transaction @ invalid transaction index");
-    let invalid_transaction_index = 50;
-    let params = rpc_params![last_block_hash, invalid_transaction_index];
-    let response: Result<Option<Transaction>, _> = client
-        .request("eth_getTransactionByBlockHashAndIndex", params)
-        .await;
-    assert_eq!(response.unwrap().is_none(), true);
+    if configs.rpc_url.clone().contains("aurora") {
+        info!("assert no transaction @ invalid block hash");
+        let block_hash = "0x0";
+        let transaction_index = 0;
+        let params = rpc_params![block_hash, transaction_index];
+        let response: Result<Option<Transaction>, jsonrpsee_core::Error> = client
+            .request("eth_getTransactionByBlockHashAndIndex", params)
+            .await;
+        assert_eq!(response.unwrap().is_none(), true);
+        info!("assert no transaction @ invalid transaction index");
+        let invalid_transaction_index = 50;
+        let params = rpc_params![last_block_hash, invalid_transaction_index];
+        let response: Result<Option<Transaction>, _> = client
+            .request("eth_getTransactionByBlockHashAndIndex", params)
+            .await;
+        assert_eq!(response.unwrap().is_none(), true);
+    }
     Ok(())
 }

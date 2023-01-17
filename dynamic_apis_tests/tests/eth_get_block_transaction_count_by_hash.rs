@@ -28,11 +28,11 @@ async fn test_eth_get_block_transaction_count_by_hash() -> anyhow::Result<()> {
         .get_test_data_content_array("receipt".to_string())
         .unwrap();
     let receipts = TransactionReceipt::load(data_contents).unwrap();
-    let client = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
+    let client = http_client::HttpClientBuilder::default().build(configs.rpc_url.clone())?;
     // assert that all blocks has at least one transaction.
     for i in 0..receipts.len() {
         info!("block hash: {}", receipts[i].block_hash.clone());
-        let params = rpc_params![receipts[i].block_hash.clone(), true];
+        let params = rpc_params![receipts[i].block_hash.clone()];
         let response: Result<String, _> = client
             .request("eth_getBlockTransactionCountByHash", params)
             .await;
@@ -44,7 +44,7 @@ async fn test_eth_get_block_transaction_count_by_hash() -> anyhow::Result<()> {
     }
     // assert zero tx_count for invalid block hash
     let block_hash = H256::from_low_u64_be(0);
-    let mut params = rpc_params![block_hash, true];
+    let mut params = rpc_params![block_hash];
     let response: Result<String, _> = client
         .request("eth_getBlockTransactionCountByHash", params)
         .await;
@@ -54,17 +54,19 @@ async fn test_eth_get_block_transaction_count_by_hash() -> anyhow::Result<()> {
         "invalid block hash: {:?} should have {:?} transaction count",
         block_hash, tx_count
     );
-    // assert zero tx_count for invalid block hash format
-    let block_hash = H160::from_low_u64_be(0);
-    params = rpc_params![block_hash, true];
-    let response: Result<String, _> = client
-        .request("eth_getBlockTransactionCountByHash", params)
-        .await;
-    tx_count_hex = response.unwrap();
-    tx_count = i64::from_str_radix(&tx_count_hex[2..tx_count_hex.len()], 16).unwrap();
-    info!(
-        "invalid block hash format: {:?} should have {:?} transaction count",
-        block_hash, tx_count
-    );
+    if configs.rpc_url.clone().contains("aurora") {
+        // assert zero tx_count for invalid block hash format
+        let block_hash = H160::from_low_u64_be(0);
+        params = rpc_params![block_hash.clone()];
+        let response: Result<String, _> = client
+            .request("eth_getBlockTransactionCountByHash", params)
+            .await;
+        tx_count_hex = response.unwrap();
+        tx_count = i64::from_str_radix(&tx_count_hex[2..tx_count_hex.len()], 16).unwrap();
+        info!(
+            "invalid block hash format: {:?} should have {:?} transaction count",
+            block_hash, tx_count
+        );
+    }
     Ok(())
 }

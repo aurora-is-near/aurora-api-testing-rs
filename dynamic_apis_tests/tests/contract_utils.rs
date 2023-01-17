@@ -55,7 +55,7 @@ impl SmartContract {
         let deployer = factory.deploy(args.unwrap())?;
         let deployed_contract = deployer
             .clone()
-            .confirmations(1usize)
+            .confirmations(20usize)
             .legacy()
             .send()
             .await?;
