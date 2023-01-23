@@ -40,11 +40,38 @@ async fn test_eth_call() -> anyhow::Result<()> {
     let to_address_content: String = task
         .get_test_data_content_by_group_index(0, "destination_address".to_string())
         .unwrap();
-    let client = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
-    let msg = MessageCallParams::new(from_address_content, to_address_content);
+    let client = http_client::HttpClientBuilder::default().build(configs.rpc_url.clone())?;
+    let msg = MessageCallParams::new(from_address_content.clone(), to_address_content.clone());
     let params = rpc_params![msg, "latest".to_string()];
     // info!("msg: {:?}",params);
     let response: Result<String, _> = client.request("eth_call", params).await;
     info!("response: {:?}", response.unwrap());
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_eth_call_eoa() -> anyhow::Result<()> {
+    let subscriber = FmtSubscriber::builder()
+        .with_max_level(Level::INFO)
+        .finish();
+    let _ = tracing::subscriber::set_global_default(subscriber);
+    info!("calling precompile SHA256 from EOA");
+    let configs = Configs::load().unwrap();
+    let test_run = TestRun::new(&configs.conn, configs.network).unwrap();
+    let task: TestTask = test_run
+        .filter_tasks_with_limit_one("transferNtimes".to_string())
+        .unwrap();
+    let to_address_content: String = task
+        .get_test_data_content_by_group_index(0, "destination_address".to_string())
+        .unwrap();
+    let sha256_precompile_addr = "0x0000000000000000000000000000000000000002".to_string();
+    let msg = MessageCallParams::new(to_address_content.clone(), sha256_precompile_addr);
+    let params = rpc_params![msg, "latest".to_string()];
+    let client = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
+    let response: Result<String, _> = client.request("eth_call", params).await;
+    info!(
+        "SHA256 Precompile contract response: {:?}",
+        response.unwrap()
+    );
     Ok(())
 }
