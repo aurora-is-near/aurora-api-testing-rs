@@ -45,7 +45,7 @@ jobs:
         env:
           NPM_CONFIG_PREFIX: "~/.npm-global"
         run: |
-          npm install -g @datadog/datadog-ci
+          npm install --save-dev @datadog/datadog-ci
       - name: cargo test & upload results
         run: |
           cp .env.example .env
