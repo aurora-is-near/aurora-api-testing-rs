@@ -41,7 +41,11 @@ jobs:
       - uses: Swatinem/rust-cache@v1
         with:
           cache-on-failure: true
-
+      - name: NPM
+        env:
+          NPM_CONFIG_PREFIX: "~/.npm-global"
+        run: |
+          npm install -g @datadog/datadog-ci
       - name: cargo test & upload results
         run: |
           cp .env.example .env
@@ -49,5 +53,4 @@ jobs:
           export AURORA_PLUS_API_KEY=${{secrets.AURORA_PLUS_API_KEY}}
           export RPC_URL=${{secrets.PARTNERS_RPC_ENDPOINT}}
           cargo test --no-fail-fast -- -Z unstable-options --format json --report-time | cargo2junit > results.xml
-          npm install --save-dev @datadog/datadog-ci
           DD_ENV=ci DATADOG_SITE=datadoghq.eu npx datadog-ci junit upload --service "aurora-relayer-api-dynamic-tests-partners-rs" results.xml 
