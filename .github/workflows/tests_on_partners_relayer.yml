@@ -52,5 +52,6 @@ jobs:
           source .env
           export AURORA_PLUS_API_KEY=${{secrets.AURORA_PLUS_API_KEY}}
           export RPC_URL=${{secrets.PARTNERS_RPC_ENDPOINT}}
-          cargo test --no-fail-fast -- -Z unstable-options --format json --report-time | cargo2junit > results.xml
+          cargo test --no-fail-fast -- -Z unstable-options --format json --report-time | tee results.json
+          cat results.json | cargo2junit > results.xml
           DD_ENV=ci DATADOG_SITE=datadoghq.eu npx datadog-ci junit upload --service "aurora-relayer-api-dynamic-tests-partners-rs" results.xml 
