@@ -35,13 +35,13 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v3
 
-      - name: Install toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-      - uses: Swatinem/rust-cache@v1
-        with:
-          cache-on-failure: true
+      # - name: Install toolchain
+      #   uses: actions-rs/toolchain@v1
+      #   with:
+      #     toolchain: stable
+      # - uses: Swatinem/rust-cache@v1
+      #   with:
+      #     cache-on-failure: true
 
       - name: cargo test & upload results
         run: |
