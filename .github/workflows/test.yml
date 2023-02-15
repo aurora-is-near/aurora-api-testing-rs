@@ -9,7 +9,7 @@ on:
 jobs:
   tests:
     name: Tests
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env:
       AURORA_PLUS_API_KEY: ${{secrets.AURORA_PLUS_API_KEY}}
       RPC_URL: ${{secrets.RPC_URL}}
