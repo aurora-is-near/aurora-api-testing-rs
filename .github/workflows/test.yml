@@ -16,6 +16,9 @@ jobs:
       NETWORK_NAME: ${{secrets.NETWORK_NAME}}
       DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
     steps:
+      - name: Adding repo directory
+        run: |
+          /usr/bin/git config --global --add safe.directory /root/privileged_runners_workdir/runners/Aurora-Priv-GH-runner-2/aurora-api-testing-rs/aurora-api-testing-rs/relayer-test-data-generator
       - name: Clone the repository
         uses: actions/checkout@v2
       - name: Clone DB repository
