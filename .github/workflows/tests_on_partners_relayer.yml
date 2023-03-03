@@ -26,7 +26,6 @@ jobs:
           ref: main
       - name: Move db to the working directory
         run: |
-          rm -f ../relayer-test-data-generator/
           mv relayer-test-data-generator/ ../
 
       - name: Install junit-report
