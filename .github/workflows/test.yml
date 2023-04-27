@@ -28,10 +28,6 @@ jobs:
           ssh-key: ${{ secrets.SSH_RELAYER_TEST_DATA_GENERATOR }}
           path: relayer-test-data-generator
           ref: main
-      - name: Install Rust
-        run: |
-          curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain stable -y --profile default --no-modify-path
-          source /usr/local/etc/profile.d/rust.sh
 
       - name: Install junit-report
         run: |
@@ -39,13 +35,12 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v3
 
-      - name: Install toolchain
+      - name: Install minimal nightly with clippy and rustfmt
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable
           profile: minimal
-          target: x86_64-unknown-linux-gnu
-          prefix: ${{ github.workspace }}/rust
+          toolchain: nightly
+          components: rustfmt, clippy
 
       - name: cargo test & upload results
         run: |
