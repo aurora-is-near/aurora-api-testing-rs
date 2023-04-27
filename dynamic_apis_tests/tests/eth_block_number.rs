@@ -36,6 +36,7 @@ async fn test_eth_block_number() -> anyhow::Result<()> {
         let live_block_number = i64::from_str_radix(&block_number[2..len], 16).unwrap();
         let receipt_block_number = receipts[i].block_number as i64;
         let result = live_block_number.cmp(&receipt_block_number);
+        info!(receipt_block_number, live_block_number);
         assert_eq!(Ordering::Greater, result);
         info!(
             "Live block number: {}, receipt block number: {}",
