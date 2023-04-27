@@ -61,7 +61,11 @@ async fn test_eth_get_block_transaction_count_by_hash() -> anyhow::Result<()> {
         let response: Result<String, _> = client
             .request("eth_getBlockTransactionCountByHash", params)
             .await;
-        assert!(response.is_err(), "Expected an error response, but got {:?}", response);
+        assert!(
+            response.is_err(),
+            "Expected an error response, but got {:?}",
+            response
+        );
     }
     Ok(())
 }
