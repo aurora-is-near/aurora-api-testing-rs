@@ -30,7 +30,7 @@ jobs:
           ref: main
       - name: Install Rust
         run: |
-          curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain stable -y --profile default --no-modify-path --prefix=/usr/local
+          curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain stable -y --profile default --no-modify-path
           source /usr/local/etc/profile.d/rust.sh
 
       - name: Install junit-report
