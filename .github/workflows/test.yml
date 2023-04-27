@@ -42,9 +42,9 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-      - uses: Swatinem/rust-cache@v1
-        with:
-          cache-on-failure: true
+          profile: minimal
+          target: x86_64-unknown-linux-gnu
+          prefix: ${{ github.workspace }}/rust
 
       - name: cargo test & upload results
         run: |
