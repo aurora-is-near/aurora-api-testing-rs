@@ -29,20 +29,20 @@ jobs:
           path: relayer-test-data-generator
           ref: main
 
+      # - name: Install minimal nightly with clippy and rustfmt
+      #   uses: actions-rs/toolchain@v1
+      #   with:
+      #     profile: minimal
+      #     toolchain: nightly
+      #     components: rustfmt, clippy
+
       - name: Install junit-report
         run: |
           cargo install cargo2junit
       - name: Checkout sources
         uses: actions/checkout@v3
 
-      - name: Install minimal nightly with clippy and rustfmt
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: nightly
-          components: rustfmt, clippy
-
-      - name: cargo test & upload results
+      - name: Run tests & upload results
         run: |
           cp .env.example .env
           source .env
