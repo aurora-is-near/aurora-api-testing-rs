@@ -31,6 +31,10 @@ jobs:
       - name: Install junit-report
         run: |
           cargo install cargo2junit
+  
+      - name: rust version
+        run: |
+          rustc --version
 
       - name: Run tests & upload results
         run: |
