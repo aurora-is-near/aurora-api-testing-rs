@@ -32,8 +32,9 @@ jobs:
         run: |
           cargo install cargo2junit
   
-      - name: rust version
+      - name: rust update
         run: |
+          rustup update
           rustc --version
           rustup show
           which -a rustc
