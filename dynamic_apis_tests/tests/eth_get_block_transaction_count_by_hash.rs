@@ -48,8 +48,8 @@ async fn test_eth_get_block_transaction_count_by_hash() -> anyhow::Result<()> {
     let response: Result<String, _> = client
         .request("eth_getBlockTransactionCountByHash", params)
         .await;
-    let mut tx_count_hex = response.unwrap();
-    let mut tx_count = i64::from_str_radix(&tx_count_hex[2..tx_count_hex.len()], 16).unwrap();
+    let tx_count_hex = response.unwrap();
+    let tx_count = i64::from_str_radix(&tx_count_hex[2..tx_count_hex.len()], 16).unwrap();
     info!(
         "invalid block hash: {:?} should have {:?} transaction count",
         block_hash, tx_count
@@ -61,11 +61,10 @@ async fn test_eth_get_block_transaction_count_by_hash() -> anyhow::Result<()> {
         let response: Result<String, _> = client
             .request("eth_getBlockTransactionCountByHash", params)
             .await;
-        tx_count_hex = response.unwrap();
-        tx_count = i64::from_str_radix(&tx_count_hex[2..tx_count_hex.len()], 16).unwrap();
-        info!(
-            "invalid block hash format: {:?} should have {:?} transaction count",
-            block_hash, tx_count
+        assert!(
+            response.is_err(),
+            "Expected an error response, but got {:?}",
+            response
         );
     }
     Ok(())

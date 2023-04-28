@@ -19,8 +19,7 @@ jobs:
       - name: Adding repo directory
         run: |
           /usr/bin/git config --global --add safe.directory /root/privileged_runners_workdir/runners/Aurora-Priv-GH-runner-2/aurora-api-testing-rs/aurora-api-testing-rs/relayer-test-data-generator
-      - name: Clone the repository
-        uses: actions/checkout@v2
+
       - name: Clone DB repository
         uses: actions/checkout@v3
         with:
@@ -28,25 +27,27 @@ jobs:
           ssh-key: ${{ secrets.SSH_RELAYER_TEST_DATA_GENERATOR }}
           path: relayer-test-data-generator
           ref: main
-      # - name: Move db to the working directory
-      #   run: |
-      #     mv relayer-test-data-generator/ ../
 
       - name: Install junit-report
         run: |
           cargo install cargo2junit
-      - name: Checkout sources
-        uses: actions/checkout@v3
+  
+      - name: rust update
+        run: |
+          rustup toolchain uninstall stable-x86_64-unknown-linux-gnu
+          rustup toolchain uninstall nightly-x86_64-unknown-linux-gnu
+          rustup toolchain uninstall 1.64.0-x86_64-unknown-linux-gnu
+          rustup toolchain install 1.65.0-x86_64-unknown-linux-gnu
+          rustup default 1.65.0-x86_64-unknown-linux-gnu
+          rustup override set 1.65.0
+          rustc --version
+          rustup show
 
-      # - name: Install toolchain
-      #   uses: actions-rs/toolchain@v1
-      #   with:
-      #     toolchain: stable
-      # - uses: Swatinem/rust-cache@v1
-      #   with:
-      #     cache-on-failure: true
+      - name: build
+        run: |
+          cargo build
 
-      - name: cargo test & upload results
+      - name: Run tests & upload results
         run: |
           cp .env.example .env
           source .env
