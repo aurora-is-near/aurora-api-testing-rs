@@ -34,9 +34,9 @@ jobs:
   
       - name: rust update
         run: |
-          rustup update
+          rustup toolchain uninstall --all
+          rustup toolchain install 1.65.0
           rustup default stable
-          rustup override unset
           rustc --version
           rustup show
 
