@@ -35,11 +35,9 @@ jobs:
       - name: rust update
         run: |
           rustup update
-          rustc --version
-          rustup show
-          which -a rustc
           rustup default stable
           rustup override unset
+          rustc --version
 
       - name: build
         run: |
