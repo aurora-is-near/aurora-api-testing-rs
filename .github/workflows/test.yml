@@ -35,6 +35,8 @@ jobs:
       - name: rust version
         run: |
           rustc --version
+          rustup show
+          which -a rustc
 
       - name: build
         run: |
