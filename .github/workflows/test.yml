@@ -34,9 +34,11 @@ jobs:
   
       - name: rust update
         run: |
-          rustup toolchain uninstall --all
-          rustup toolchain install 1.65.0
-          rustup default stable
+          rustup toolchain uninstall stable-x86_64-unknown-linux-gnu
+          rustup toolchain uninstall nightly-x86_64-unknown-linux-gnu
+          rustup toolchain uninstall 1.64.0-x86_64-unknown-linux-gnu
+          rustup toolchain install 1.65.0-x86_64-unknown-linux-gnu
+          rustup default 1.64.0-x86_64-unknown-linux-gnu
           rustc --version
           rustup show
 
