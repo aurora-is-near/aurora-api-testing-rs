@@ -6,7 +6,6 @@ use ethers_core::{
 use ethers_middleware::SignerMiddleware;
 use ethers_providers::{Http, Provider};
 use ethers_signers::{LocalWallet, Signer};
-use jsonrpsee_core::client::TransportSenderT;
 use std::convert::TryFrom;
 use std::error::Error;
 
@@ -69,7 +68,8 @@ impl SmartContract {
         args: Option<T>,
         signer: SignerMiddleware<Provider<Http>, LocalWallet>,
     ) -> Result<D, Box<dyn Error>> {
-        let contract = Contract::new(address, self.abi.clone(), signer);
+        let client = std::sync::Arc::new(signer);
+        let contract = Contract::new(address, self.abi.clone(), client);
         let value: D = contract
             .method::<_, D>(method, args.unwrap())?
             .call()
@@ -84,7 +84,8 @@ impl SmartContract {
         args: Option<T>,
         signer: SignerMiddleware<Provider<Http>, LocalWallet>,
     ) -> Result<Option<TransactionReceipt>, Box<dyn Error>> {
-        let contract = Contract::new(address, self.abi.clone(), signer);
+        let client = std::sync::Arc::new(signer);
+        let contract = Contract::new(address, self.abi.clone(), client);
         let call = contract.method::<_, H256>(method, args.unwrap())?;
         let pending_tx = call.gas_price(21000);
         let pending_tx = pending_tx.send().await?;
