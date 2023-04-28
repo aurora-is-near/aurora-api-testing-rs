@@ -36,6 +36,10 @@ jobs:
         run: |
           rustc --version
 
+      - name: build
+        run: |
+          cargo build
+
       - name: Run tests & upload results
         run: |
           cp .env.example .env
