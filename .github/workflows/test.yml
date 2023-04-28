@@ -38,6 +38,7 @@ jobs:
           rustup default stable
           rustup override unset
           rustc --version
+          rustup show
 
       - name: build
         run: |
