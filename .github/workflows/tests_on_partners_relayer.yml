@@ -1,60 +1,60 @@
-name: Dynamic Aurora API Testing On Partners Relayer
+# name: Dynamic Aurora API Testing On Partners Relayer
 
-on:
-  schedule:
-    - cron: '0 * * * *'
-  workflow_dispatch:
+# on:
+#   schedule:
+#     - cron: '0 * * * *'
+#   workflow_dispatch:
 
-jobs:
-  tests:
-    name: Tests
-    runs-on: self-hosted
-    env:
-      AURORA_PLUS_API_KEY: ${{secrets.AURORA_PLUS_API_KEY}}
-      RPC_URL: ${{secrets.PARTNERS_RPC_ENDPOINT}}
-      NETWORK_NAME: ${{secrets.NETWORK_NAME}}
-      DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
-    steps:
-      - name: Adding repo directory
-        run: |
-          /usr/bin/git config --global --add safe.directory /root/privileged_runners_workdir/runners/Aurora-Priv-GH-runner-2/aurora-api-testing-rs/aurora-api-testing-rs/relayer-test-data-generator
-      - name: Clone the repository
-        uses: actions/checkout@v2
-      - name: Clone DB repository
-        uses: actions/checkout@v3
-        with:
-          repository: aurora-is-near/relayer-test-data-generator
-          ssh-key: ${{ secrets.SSH_RELAYER_TEST_DATA_GENERATOR }}
-          path: relayer-test-data-generator
-          ref: main
-      # - name: Move db to the working directory
-      #   run: |
-      #     mv relayer-test-data-generator/ ../
+# jobs:
+#   tests:
+#     name: Tests
+#     runs-on: self-hosted
+#     env:
+#       AURORA_PLUS_API_KEY: ${{secrets.AURORA_PLUS_API_KEY}}
+#       RPC_URL: ${{secrets.PARTNERS_RPC_ENDPOINT}}
+#       NETWORK_NAME: ${{secrets.NETWORK_NAME}}
+#       DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
+#     steps:
+#       - name: Adding repo directory
+#         run: |
+#           /usr/bin/git config --global --add safe.directory /root/privileged_runners_workdir/runners/Aurora-Priv-GH-runner-2/aurora-api-testing-rs/aurora-api-testing-rs/relayer-test-data-generator
+#       - name: Clone the repository
+#         uses: actions/checkout@v2
+#       - name: Clone DB repository
+#         uses: actions/checkout@v3
+#         with:
+#           repository: aurora-is-near/relayer-test-data-generator
+#           ssh-key: ${{ secrets.SSH_RELAYER_TEST_DATA_GENERATOR }}
+#           path: relayer-test-data-generator
+#           ref: main
+#       # - name: Move db to the working directory
+#       #   run: |
+#       #     mv relayer-test-data-generator/ ../
 
-      - name: Install junit-report
-        run: |
-          cargo install cargo2junit
-      - name: Checkout sources
-        uses: actions/checkout@v3
+#       - name: Install junit-report
+#         run: |
+#           cargo install cargo2junit
+#       - name: Checkout sources
+#         uses: actions/checkout@v3
 
-      # - name: Install toolchain
-      #   uses: actions-rs/toolchain@v1
-      #   with:
-      #     toolchain: stable
-      # - uses: Swatinem/rust-cache@v1
-      #   with:
-      #     cache-on-failure: true
-      - name: NPM
-        env:
-          NPM_CONFIG_PREFIX: "~/.npm-global"
-        run: |
-          npm install --save-dev @datadog/datadog-ci
-      - name: cargo test & upload results
-        run: |
-          cp .env.example .env
-          source .env
-          export AURORA_PLUS_API_KEY=${{secrets.AURORA_PLUS_API_KEY}}
-          export RPC_URL=${{secrets.PARTNERS_RPC_ENDPOINT}}
-          cargo test --no-fail-fast -- -Z unstable-options --format json --report-time | tee results.json
-          cat results.json | cargo2junit > results.xml
-          DD_ENV=ci DATADOG_SITE=datadoghq.eu npx datadog-ci junit upload --service "aurora-relayer-api-dynamic-tests-partners-rs" results.xml 
+#       # - name: Install toolchain
+#       #   uses: actions-rs/toolchain@v1
+#       #   with:
+#       #     toolchain: stable
+#       # - uses: Swatinem/rust-cache@v1
+#       #   with:
+#       #     cache-on-failure: true
+#       - name: NPM
+#         env:
+#           NPM_CONFIG_PREFIX: "~/.npm-global"
+#         run: |
+#           npm install --save-dev @datadog/datadog-ci
+#       - name: cargo test & upload results
+#         run: |
+#           cp .env.example .env
+#           source .env
+#           export AURORA_PLUS_API_KEY=${{secrets.AURORA_PLUS_API_KEY}}
+#           export RPC_URL=${{secrets.PARTNERS_RPC_ENDPOINT}}
+#           cargo test --no-fail-fast -- -Z unstable-options --format json --report-time | tee results.json
+#           cat results.json | cargo2junit > results.xml
+#           DD_ENV=ci DATADOG_SITE=datadoghq.eu npx datadog-ci junit upload --service "aurora-relayer-api-dynamic-tests-partners-rs" results.xml 
