@@ -43,3 +43,7 @@ ethers-middleware = "2.0.3"
 ethers-contract = "2.0.3"
 serial_test = "2.0.0"
 futures = "0.3.25"
+
+[toolchain]
+channel = "1.65.0"
+components = ["clippy", "rustfmt"]
