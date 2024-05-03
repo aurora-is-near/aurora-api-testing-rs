@@ -32,7 +32,14 @@ jobs:
         run: |
           cargo install cargo2junit
 
-      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - name: rust update
+        run: |
+          rustup toolchain uninstall stable-x86_64-unknown-linux-gnu
+          rustup toolchain install 1.67.0-x86_64-unknown-linux-gnu
+          rustup default 1.67.0-x86_64-unknown-linux-gnu
+          rustup override set 1.67.0
+          rustc --version
+          rustup show
 
       - name: build
         run: |
