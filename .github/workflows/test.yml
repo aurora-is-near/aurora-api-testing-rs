@@ -34,7 +34,6 @@ jobs:
 
       - name: rust update
         run: |
-          rustup install nightly
           rustup default nightly
           rustup override set nightly
           rustc --version
