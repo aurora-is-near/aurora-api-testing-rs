@@ -34,8 +34,9 @@ jobs:
 
       - name: rust update
         run: |
-          rustup default stable-x86_64-unknown-linux-gnu
-          rustup override set stable
+          rustup install nightly
+          rustup default nightly
+          rustup override set nightly
           rustc --version
           rustup show
 
