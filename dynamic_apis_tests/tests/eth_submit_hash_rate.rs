@@ -9,6 +9,7 @@ mod configs;
 use configs::Configs;
 
 #[tokio::test]
+#[ignore = "unsupported method"]
 async fn test_eth_submit_hash_rate() -> anyhow::Result<()> {
     let subscriber = FmtSubscriber::builder()
         .with_max_level(Level::INFO)

@@ -26,6 +26,7 @@ impl FilterParams {
 }
 
 #[tokio::test]
+#[ignore = "unsupported method"]
 async fn test_eth_uninstall_filter() -> anyhow::Result<()> {
     let subscriber = FmtSubscriber::builder()
         .with_max_level(Level::INFO)
