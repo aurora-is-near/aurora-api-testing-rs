@@ -4,12 +4,10 @@ use jsonrpsee_http_client as http_client;
 use tracing::{info, Level};
 use tracing_subscriber::FmtSubscriber;
 
-#[path = "configs.rs"]
 mod configs;
 use configs::Configs;
 
 #[tokio::test]
-#[ignore = "unsupported method"]
 async fn test_eth_submit_hash_rate() -> anyhow::Result<()> {
     let subscriber = FmtSubscriber::builder()
         .with_max_level(Level::INFO)
@@ -29,10 +27,7 @@ async fn test_eth_submit_hash_rate() -> anyhow::Result<()> {
             Err(error) => error.to_string(),
         };
         // info!("{}", result);
-        assert_eq!(
-            result.contains("Unsupported method: eth_SubmitHashRate"),
-            true
-        );
+        assert_eq!(result.contains("method not supported"), true);
     } else if configs.rpc_url.clone().contains("goerli") {
         let goerli_responses = [
             "the method eth_SubmitHashRate does not exist",

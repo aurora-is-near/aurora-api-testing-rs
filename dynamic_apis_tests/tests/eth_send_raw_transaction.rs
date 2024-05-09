@@ -15,7 +15,6 @@ extern crate serde;
 extern crate serde_derive;
 extern crate serde_json;
 
-#[path = "configs.rs"]
 mod configs;
 use configs::Configs;
 

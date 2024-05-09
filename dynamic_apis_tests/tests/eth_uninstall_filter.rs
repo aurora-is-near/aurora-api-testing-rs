@@ -5,7 +5,6 @@ use serde::{Deserialize, Serialize};
 use tracing::{info, Level};
 use tracing_subscriber::FmtSubscriber;
 
-#[path = "configs.rs"]
 mod configs;
 use configs::Configs;
 
@@ -26,7 +25,6 @@ impl FilterParams {
 }
 
 #[tokio::test]
-#[ignore = "unsupported method"]
 async fn test_eth_uninstall_filter() -> anyhow::Result<()> {
     let subscriber = FmtSubscriber::builder()
         .with_max_level(Level::INFO)

@@ -9,7 +9,6 @@ use std::i64;
 use tracing::{info, Level};
 use tracing_subscriber::FmtSubscriber;
 
-#[path = "configs.rs"]
 mod configs;
 use configs::Configs;
 

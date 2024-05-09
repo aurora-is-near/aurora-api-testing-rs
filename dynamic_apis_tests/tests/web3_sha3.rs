@@ -4,7 +4,6 @@ use jsonrpsee_http_client as http_client;
 use tracing::{info, Level};
 use tracing_subscriber::FmtSubscriber;
 
-#[path = "configs.rs"]
 mod configs;
 use configs::Configs;
 
