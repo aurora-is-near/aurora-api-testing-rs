@@ -9,10 +9,6 @@ use tracing_subscriber::FmtSubscriber;
 mod configs;
 use configs::Configs;
 
-#[path = "utils.rs"]
-mod utils;
-use utils::hex_string_to_i32;
-
 #[tokio::test]
 async fn test_eth_get_uncle_by_block_number_and_index() -> anyhow::Result<()> {
     let configs = Configs::load().unwrap();

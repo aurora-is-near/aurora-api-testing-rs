@@ -9,11 +9,9 @@ use tracing_subscriber::FmtSubscriber;
 mod configs;
 use configs::Configs;
 
-#[path = "utils.rs"]
 mod utils;
 use utils::hex_string_to_i32;
 
-#[path = "aurora_transaction_receipt.rs"]
 mod aurora_transaction_receipt;
 use aurora_transaction_receipt::AuroraTransactionReceipt;
 

@@ -1,12 +1,6 @@
-use dao::dao::helpers::TransactionReceipt;
 use dao::dao::models::{TestRun, TestTask};
-use ethers_contract::Contract;
-use ethers_core::abi::{Abi, Token, Tokenize};
-use ethers_core::types::{Address, Bytes, U256};
-use hex;
-use jsonrpsee_core::client::ClientT;
-use jsonrpsee_core::rpc_params;
-use jsonrpsee_http_client as http_client;
+use ethers_core::abi::Token;
+use ethers_core::types::Address;
 use serial_test::serial;
 use tracing::{info, Level};
 use tracing_subscriber::FmtSubscriber;
@@ -18,15 +12,8 @@ extern crate serde_json;
 mod configs;
 use configs::Configs;
 
-#[path = "utils.rs"]
 mod utils;
-use utils::hex_string_to_i32;
 
-#[path = "aurora_transaction_receipt.rs"]
-mod aurora_transaction_receipt;
-use aurora_transaction_receipt::AuroraTransactionReceipt;
-
-#[path = "contract_utils.rs"]
 mod contract_utils;
 use contract_utils::{SignerWallet, SmartContract};
 

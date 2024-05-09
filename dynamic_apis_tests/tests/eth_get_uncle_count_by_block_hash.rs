@@ -9,7 +9,6 @@ use tracing_subscriber::FmtSubscriber;
 mod configs;
 use configs::Configs;
 
-#[path = "utils.rs"]
 mod utils;
 use utils::hex_string_to_i32;
 

@@ -29,7 +29,7 @@ impl SignerWallet<'_> {
             .parse::<LocalWallet>()
             .unwrap()
             .with_chain_id(self.chain_id);
-        let provider = Provider::<Http>::try_from(self.rpc_url.clone())?;
+        let provider = Provider::<Http>::try_from(self.rpc_url)?;
         Ok(SignerMiddleware::new(provider.clone(), wallet))
     }
 }
