@@ -39,7 +39,7 @@ async fn test_eth_send_raw_transaction_increment() -> anyhow::Result<()> {
     );
     // call (value)
     let signer = signer_wallet.create().unwrap();
-    let signer_address = signer.address().to_string();
+    let _signer_address = signer.address().to_string();
     let contract_address = contract.deploy(Some(()), signer).await.unwrap();
     info!("Increment contract Address: {:?}", contract_address);
     let signer = signer_wallet.create().unwrap();
@@ -87,7 +87,7 @@ async fn test_eth_send_raw_transaction_wtm() -> anyhow::Result<()> {
     let deployer_private_key = task
         .get_test_data_content_by_group_index(1, "destination_private_key".to_string())
         .unwrap();
-    let destination_address = task
+    let _destination_address = task
         .get_test_data_content_by_group_index(0, "destination_address".to_string())
         .unwrap();
     let deployer_address = task

@@ -25,11 +25,12 @@ impl Configs {
         let chain_id = get_chain_id(&network).unwrap().to_string();
         let client_version = get_client_version(&network).unwrap();
         let protocol_version = get_protocol_version(&network).unwrap().to_string();
+        let conn = get_db_connection(&full_db_path).unwrap();
         Ok(Configs {
             rpc_url: url,
             wss_url: wss_rpc_url,
             network,
-            conn: get_db_connection(&full_db_path).unwrap(),
+            conn,
             chain_id,
             client_version,
             protocol_version,

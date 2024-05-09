@@ -39,11 +39,11 @@ async fn test_eth_gas_price() -> anyhow::Result<()> {
         assert_eq!(Ordering::Greater, res);
         info!("Aurora plus response: {}", gas_price_aurora);
     } else {
-        let mut params = rpc_params![];
+        let params = rpc_params![];
         let response_aurora_plus: Result<String, _> =
             client_aurora_plus.request("eth_gasPrice", params).await;
         let gas_price_aurora = response_aurora_plus.unwrap();
-        let mut res = hex_string_to_i64(gas_price_aurora.clone()).cmp(&0); // result should be zero
+        let res = hex_string_to_i64(gas_price_aurora.clone()).cmp(&0); // result should be zero
         assert_eq!(Ordering::Equal, res);
         info!("Aurora Relayer v2 response: {}", gas_price_aurora);
     }
