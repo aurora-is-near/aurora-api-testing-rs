@@ -100,9 +100,9 @@ pub mod models {
                     end: row.get(4)?,
                     data_groups: TestDataGroup::load(&conn, db_id).unwrap(),
                 })
-            });
+            })?;
             let mut tasks: Vec<TestTask> = Vec::new();
-            for task in tasks_iter?.next() {
+            for task in tasks_iter {
                 tasks.push(task?);
             }
             Ok(tasks)
