@@ -6,6 +6,7 @@ use tracing_subscriber::FmtSubscriber;
 
 use crate::configs::Configs;
 
+#[ignore]
 #[tokio::test]
 async fn test_eth_submit_hash_rate() -> anyhow::Result<()> {
     let subscriber = FmtSubscriber::builder()

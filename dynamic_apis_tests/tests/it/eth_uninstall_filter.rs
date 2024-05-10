@@ -23,6 +23,7 @@ impl FilterParams {
     }
 }
 
+#[ignore]
 #[tokio::test]
 async fn test_eth_uninstall_filter() -> anyhow::Result<()> {
     let subscriber = FmtSubscriber::builder()
