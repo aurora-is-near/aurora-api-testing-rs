@@ -6,7 +6,6 @@ use rusqlite::Connection;
 
 pub struct Configs {
     pub rpc_url: String,
-    pub wss_url: String,
     pub network: String,
     pub conn: Connection,
     pub chain_id: String,
@@ -17,7 +16,7 @@ pub struct Configs {
 impl Configs {
     pub fn load() -> Result<Configs, rusqlite::Error> {
         let rpc_url = format!("{}", get_env_var(&"RPC_URL".to_string()).unwrap());
-        let wss_rpc_url = format!("wss://{}", get_env_var(&"RPC_URL".to_string()).unwrap());
+        let _wss_rpc_url = format!("wss://{}", get_env_var(&"RPC_URL".to_string()).unwrap());
         let api_key = get_env_var(&"AURORA_PLUS_API_KEY".to_string()).unwrap();
         let url = format!("{}", rpc_url);
         let full_db_path = get_full_db_path().unwrap();
@@ -28,7 +27,6 @@ impl Configs {
         let conn = get_db_connection(&full_db_path).unwrap();
         Ok(Configs {
             rpc_url: url,
-            wss_url: wss_rpc_url,
             network,
             conn,
             chain_id,
