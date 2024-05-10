@@ -14,7 +14,6 @@ jobs:
       AURORA_PLUS_API_KEY: ${{secrets.AURORA_PLUS_API_KEY}}
       RPC_URL: ${{secrets.RPC_URL}}
       NETWORK_NAME: ${{secrets.NETWORK_NAME}}
-      DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
     steps:
       - name: Adding repo directory
         run: |
@@ -45,10 +44,6 @@ jobs:
 
       - name: Run tests
         continue-on-error: true
-        env:
-          AURORA_PLUS_API_KEY: ${{secrets.AURORA_PLUS_API_KEY}}
-          RPC_URL: ${{secrets.RPC_URL}}
-          NETWORK_NAME: ${{secrets.NETWORK_NAME}}
         run: |
           cp .env.example .env
           source .env
