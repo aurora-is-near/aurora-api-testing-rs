@@ -26,9 +26,9 @@ async fn test_eth_get_uncle_count_by_block_hash() -> anyhow::Result<()> {
         .unwrap();
     let receipts = TransactionReceipt::load(data_contents).unwrap();
     let client = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
-    for i in 0..receipts.len() {
-        info!("block hash: {}", receipts[i].block_hash.to_string());
-        let params = rpc_params![receipts[i].block_hash.to_string()];
+    for receipt in receipts {
+        info!("block hash: {}", receipt.block_hash.to_string());
+        let params = rpc_params![receipt.block_hash.to_string()];
         let response: Result<String, _> =
             client.request("eth_getUncleCountByBlockHash", params).await;
         let uncle_count = response.unwrap();

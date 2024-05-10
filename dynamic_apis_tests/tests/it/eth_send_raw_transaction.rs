@@ -125,7 +125,7 @@ async fn test_eth_send_raw_transaction_wtm() -> anyhow::Result<()> {
         .submit(
             contract_address,
             "transfer",
-            Some((Token::Address(receiver.clone()), Token::Uint(10.into()))),
+            Some((Token::Address(receiver), Token::Uint(10.into()))),
             signer,
         )
         .await
@@ -139,7 +139,7 @@ async fn test_eth_send_raw_transaction_wtm() -> anyhow::Result<()> {
         .call::<_, i32>(
             contract_address,
             "balanceOf",
-            Some(Token::Address(receiver.clone())),
+            Some(Token::Address(receiver)),
             signer.clone(),
         )
         .await
@@ -168,8 +168,8 @@ async fn test_eth_send_raw_transaction_wtm() -> anyhow::Result<()> {
     // approve
     let signer = signer_wallet.create().unwrap();
     let contract = SmartContract::new(abi.clone(), bytecode.clone());
-    let to = Token::Address(receiver.clone());
-    let from = Token::Address(signer.address().clone());
+    let to = Token::Address(receiver);
+    let from = Token::Address(signer.address());
     let amount = Token::Uint(10.into());
     let receipt = contract
         .submit(
@@ -188,10 +188,7 @@ async fn test_eth_send_raw_transaction_wtm() -> anyhow::Result<()> {
         .call::<_, i32>(
             contract_address,
             "allowance",
-            Some((
-                Token::Address(signer.address().clone()),
-                Token::Address(receiver.clone()),
-            )),
+            Some((Token::Address(signer.address()), Token::Address(receiver))),
             signer.clone(),
         )
         .await

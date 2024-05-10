@@ -24,24 +24,24 @@ async fn test_eth_get_block_by_hash() -> anyhow::Result<()> {
         .unwrap();
     let receipts = TransactionReceipt::load(data_contents).unwrap();
     let client = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
-    for i in 0..receipts.len() {
-        info!("block hash: {}", receipts[i].block_hash.clone());
-        let params = rpc_params![receipts[i].block_hash.clone(), true];
+    for receipt in receipts {
+        info!("block hash: {}", receipt.block_hash.clone());
+        let params = rpc_params![receipt.block_hash.clone(), true];
         let response: Result<BlockWithTransactionReceipts, _> =
             client.request("eth_getBlockByHash", params).await;
         let block = response.unwrap();
-        assert_eq!(block.hash, receipts[i].block_hash);
+        assert_eq!(block.hash, receipt.block_hash);
         assert_eq!(
             i32::from_str_radix(&block.number[2..block.number.len()], 16).unwrap(),
-            receipts[i].block_number
+            receipt.block_number
         );
         let tx_hashes: Vec<String> = block
             .transactions
             .into_iter()
-            .filter(|t| t.hash == receipts[i].transaction_hash)
+            .filter(|t| t.hash == receipt.transaction_hash)
             .map(|t| t.hash)
             .collect();
-        assert_eq!(tx_hashes[0], receipts[i].transaction_hash);
+        assert_eq!(tx_hashes[0], receipt.transaction_hash);
     }
     Ok(())
 }

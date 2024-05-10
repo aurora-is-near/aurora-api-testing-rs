@@ -62,7 +62,7 @@ async fn test_eth_get_transaction_by_block_hash_and_index() -> anyhow::Result<()
         let response: Result<Option<Transaction>, _> = client
             .request("eth_getTransactionByBlockHashAndIndex", params)
             .await;
-        assert_eq!(response.unwrap().is_none(), true);
+        assert!(response.unwrap().is_none());
     }
     Ok(())
 }

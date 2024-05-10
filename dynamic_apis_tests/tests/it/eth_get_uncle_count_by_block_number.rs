@@ -26,9 +26,9 @@ async fn test_eth_get_uncle_count_by_block_number() -> anyhow::Result<()> {
         .unwrap();
     let receipts = TransactionReceipt::load(data_contents).unwrap();
     let client = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
-    for i in 0..receipts.len() {
-        info!("block number: {}", receipts[i].block_number);
-        let params = rpc_params![receipts[i].block_number.to_string()];
+    for receipt in receipts {
+        info!("block number: {}", receipt.block_number);
+        let params = rpc_params![receipt.block_number.to_string()];
         let response: Result<String, _> = client
             .request("eth_getUncleCountByBlockNumber", params)
             .await;

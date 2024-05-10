@@ -27,9 +27,9 @@ async fn test_eth_get_block_transaction_count_by_number() -> anyhow::Result<()> 
     let receipts = TransactionReceipt::load(data_contents).unwrap();
     let client = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
     // assert that all blocks has at least one transaction.
-    for i in 0..receipts.len() {
-        info!("block number: {}", receipts[i].block_number);
-        let params = rpc_params![receipts[i].block_number];
+    for receipt in receipts {
+        info!("block number: {}", receipt.block_number);
+        let params = rpc_params![receipt.block_number];
         let response: Result<String, _> = client
             .request("eth_getBlockTransactionCountByNumber", params)
             .await;

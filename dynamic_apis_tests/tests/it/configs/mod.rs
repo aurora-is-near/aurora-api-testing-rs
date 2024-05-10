@@ -1,5 +1,5 @@
 use dao::dao::models::get_db_connection;
-use dao::utils::utils::{
+use dao::utils::{
     get_chain_id, get_client_version, get_env_var, get_full_db_path, get_protocol_version,
 };
 use rusqlite::Connection;
@@ -16,12 +16,12 @@ pub struct Configs {
 
 impl Configs {
     pub fn load() -> Result<Configs, rusqlite::Error> {
-        let rpc_url = format!("{}", get_env_var(&"RPC_URL".to_string()).unwrap());
-        let wss_rpc_url = format!("wss://{}", get_env_var(&"RPC_URL".to_string()).unwrap());
-        let api_key = get_env_var(&"AURORA_PLUS_API_KEY".to_string()).unwrap();
-        let url = format!("{}", rpc_url);
+        let rpc_url = get_env_var("RPC_URL").unwrap().to_string();
+        let wss_rpc_url = format!("wss://{}", get_env_var("RPC_URL").unwrap());
+        let _api_key = get_env_var("AURORA_PLUS_API_KEY").unwrap();
+        let url = rpc_url.to_string();
         let full_db_path = get_full_db_path().unwrap();
-        let network = get_env_var(&"NETWORK_NAME".to_string()).unwrap();
+        let network = get_env_var("NETWORK_NAME").unwrap();
         let chain_id = get_chain_id(&network).unwrap().to_string();
         let client_version = get_client_version(&network).unwrap();
         let protocol_version = get_protocol_version(&network).unwrap().to_string();

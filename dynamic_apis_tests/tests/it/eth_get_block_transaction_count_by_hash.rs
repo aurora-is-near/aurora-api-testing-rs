@@ -28,9 +28,9 @@ async fn test_eth_get_block_transaction_count_by_hash() -> anyhow::Result<()> {
     let receipts = TransactionReceipt::load(data_contents).unwrap();
     let client = http_client::HttpClientBuilder::default().build(configs.rpc_url.clone())?;
     // assert that all blocks has at least one transaction.
-    for i in 0..receipts.len() {
-        info!("block hash: {}", receipts[i].block_hash.clone());
-        let params = rpc_params![receipts[i].block_hash.clone()];
+    for receipt in receipts {
+        info!("block hash: {}", receipt.block_hash.clone());
+        let params = rpc_params![receipt.block_hash.clone()];
         let response: Result<String, _> = client
             .request("eth_getBlockTransactionCountByHash", params)
             .await;
@@ -55,7 +55,7 @@ async fn test_eth_get_block_transaction_count_by_hash() -> anyhow::Result<()> {
     if configs.rpc_url.clone().contains("aurora") {
         // assert zero tx_count for invalid block hash format
         let block_hash = H160::from_low_u64_be(0);
-        params = rpc_params![block_hash.clone()];
+        params = rpc_params![block_hash];
         let response: Result<String, _> = client
             .request("eth_getBlockTransactionCountByHash", params)
             .await;

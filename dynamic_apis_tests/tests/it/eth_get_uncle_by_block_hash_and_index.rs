@@ -24,9 +24,9 @@ async fn test_eth_get_uncle_by_block_hash_and_index() -> anyhow::Result<()> {
         .unwrap();
     let receipts = TransactionReceipt::load(data_contents).unwrap();
     let client = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
-    for i in 0..receipts.len() {
-        info!("block hash: {}", receipts[i].block_hash.to_string());
-        let params = rpc_params![receipts[i].block_hash.to_string(), "0x0"];
+    for receipt in receipts {
+        info!("block hash: {}", receipt.block_hash.to_string());
+        let params = rpc_params![receipt.block_hash.to_string(), "0x0"];
         let response: Result<Option<String>, _> = client
             .request("eth_getUncleByBlockHashAndIndex", params)
             .await;

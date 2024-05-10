@@ -1,6 +1,5 @@
 use dao::dao::helpers::TransactionReceipt;
 use dao::dao::models::{TestRun, TestTask};
-use hex;
 use jsonrpsee_core::client::ClientT;
 use jsonrpsee_core::rpc_params;
 use jsonrpsee_http_client as http_client;
@@ -57,7 +56,7 @@ async fn test_eth_get_storage_at() -> anyhow::Result<()> {
         Err(e) => panic!("Invalid UTF-8 sequence: {}", e),
     };
     info!("Asserting token name is: {:?}", token_name_str);
-    assert_eq!(token_name_str.contains(&expected_token_name), true);
+    assert!(token_name_str.contains(&expected_token_name));
     let expected_token_symbol = String::from("WTM");
     let storage_location = String::from("0x04");
     let params = rpc_params![
@@ -74,6 +73,6 @@ async fn test_eth_get_storage_at() -> anyhow::Result<()> {
         Err(e) => panic!("Invalid UTF-8 sequence: {}", e),
     };
     info!("Asserting token symbol is: {:?}", token_symbol_str);
-    assert_eq!(token_symbol_str.contains(&expected_token_symbol), true);
+    assert!(token_symbol_str.contains(&expected_token_symbol));
     Ok(())
 }

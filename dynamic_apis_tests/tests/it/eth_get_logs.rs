@@ -52,7 +52,7 @@ async fn test_eth_get_logs() -> anyhow::Result<()> {
             .unwrap();
         let transactions = TransactionReceipt::load(vec![receipt]).unwrap();
         for log in &transactions[0].logs {
-            let topics: Vec<String> = log.topics.iter().map(|t| t.clone()).collect();
+            let topics: Vec<String> = log.topics.to_vec();
             let log_filter = LogFilter {
                 topics: vec![topics[0].clone()],
                 address: log.address.to_string(),

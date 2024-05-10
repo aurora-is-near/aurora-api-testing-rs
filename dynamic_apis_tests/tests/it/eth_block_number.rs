@@ -26,13 +26,13 @@ async fn test_eth_block_number() -> anyhow::Result<()> {
         .with_max_level(Level::INFO)
         .finish();
     let _ = tracing::subscriber::set_global_default(subscriber);
-    for i in 0..receipts.len() {
+    for receipt in receipts {
         let params = rpc_params![];
         let response: Result<String, _> = client.request("eth_blockNumber", params).await;
         let block_number = response.unwrap();
         let len = block_number.len();
         let live_block_number = i64::from_str_radix(&block_number[2..len], 16).unwrap();
-        let receipt_block_number = receipts[i].block_number as i64;
+        let receipt_block_number = receipt.block_number as i64;
         let result = live_block_number.cmp(&receipt_block_number);
         info!(receipt_block_number, live_block_number);
         assert_eq!(Ordering::Greater, result);
