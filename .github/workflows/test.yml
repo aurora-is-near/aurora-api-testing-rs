@@ -14,11 +14,11 @@ jobs:
       AURORA_PLUS_API_KEY: ${{secrets.AURORA_PLUS_API_KEY}}
       RPC_URL: ${{secrets.RPC_URL}}
       NETWORK_NAME: ${{secrets.NETWORK_NAME}}
+      DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
     steps:
       - name: Adding repo directory
         run: |
           /usr/bin/git config --global --add safe.directory /root/privileged_runners_workdir/runners/Aurora-Priv-GH-runner-2/aurora-api-testing-rs/aurora-api-testing-rs/relayer-test-data-generator
-
       - name: Clone DB repository
         uses: actions/checkout@v3
         with:
@@ -30,18 +30,15 @@ jobs:
       - name: Install junit-report
         run: |
           cargo install cargo2junit
-
       - name: rust update
         run: |
           rustup default nightly
           rustup override set nightly
           rustc --version
           rustup show
-
       - name: build
         run: |
           cargo build
-
       - name: Run tests
         continue-on-error: true
         run: |
@@ -49,10 +46,7 @@ jobs:
           source .env
           export AURORA_PLUS_API_KEY=${{secrets.AURORA_PLUS_API_KEY}}
           cargo test --no-fail-fast -- -Z unstable-options --format json --report-time | cargo2junit > results.xml
-
       - name: Upload results
-        env:
-          DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
         run: |
           npm install --save-dev @datadog/datadog-ci
           DD_ENV=ci DATADOG_SITE=datadoghq.eu npx datadog-ci junit upload --service "aurora-relayer-api-dynamic-tests-aurora-plus-mainnet-rs" results.xml
