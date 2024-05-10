@@ -1,4 +1,4 @@
-name: Aurora API Testing
+name: Test Suite
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
   pull_request:
 
 jobs:
-  tests:
-    name: Tests
+  test:
+    name: Test
     runs-on: self-hosted
     env:
       AURORA_PLUS_API_KEY: ${{secrets.AURORA_PLUS_API_KEY}}
