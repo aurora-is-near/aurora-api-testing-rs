@@ -50,6 +50,7 @@ jobs:
           source .env
           export AURORA_PLUS_API_KEY=${{secrets.AURORA_PLUS_API_KEY}}
           cargo test --no-fail-fast -- -Z unstable-options --format json --report-time | cargo2junit > results.xml
+
       - name: Upload results
         run: |
           npm install --save-dev @datadog/datadog-ci
