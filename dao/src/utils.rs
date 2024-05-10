@@ -17,7 +17,7 @@ pub fn load_env_file() -> HashMap<String, String> {
 
 pub fn get_env_var(var: &str) -> Option<String> {
     let vars = load_env_file();
-    Some(vars.get(&var.to_string())?.to_string())
+    Some(vars.get(var)?.to_string())
 }
 
 pub fn get_full_db_path() -> Option<PathBuf> {
