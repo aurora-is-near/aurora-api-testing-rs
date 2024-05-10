@@ -1,14 +1,14 @@
-name: Aurora API Testing
+name: Test Suite
 
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
 
 jobs:
-  tests:
-    name: Tests
+  test:
+    name: Test
     runs-on: self-hosted
     env:
       AURORA_PLUS_API_KEY: ${{secrets.AURORA_PLUS_API_KEY}}
@@ -21,7 +21,7 @@ jobs:
           /usr/bin/git config --global --add safe.directory /root/privileged_runners_workdir/runners/Aurora-Priv-GH-runner-2/aurora-api-testing-rs/aurora-api-testing-rs/relayer-test-data-generator
 
       - name: Clone DB repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: aurora-is-near/relayer-test-data-generator
           ssh-key: ${{ secrets.SSH_RELAYER_TEST_DATA_GENERATOR }}
