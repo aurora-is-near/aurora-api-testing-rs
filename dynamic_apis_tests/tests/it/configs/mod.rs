@@ -1,5 +1,5 @@
 use dao::dao::models::get_db_connection;
-use dao::utils::utils::{
+use dao::utils::{
     get_chain_id, get_client_version, get_env_var, get_full_db_path, get_protocol_version,
 };
 use rusqlite::Connection;

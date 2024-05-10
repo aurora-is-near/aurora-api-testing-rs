@@ -1,4 +1,4 @@
-use dao::utils::utils::get_env_var;
+use dao::utils::get_env_var;
 use jsonrpsee_core::client::ClientT;
 use jsonrpsee_core::rpc_params;
 use jsonrpsee_http_client as http_client;
