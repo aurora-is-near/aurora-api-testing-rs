@@ -18,7 +18,7 @@ impl Configs {
         let rpc_url = format!("{}", get_env_var(&"RPC_URL".to_string()).unwrap());
         let _wss_rpc_url = format!("wss://{}", get_env_var(&"RPC_URL".to_string()).unwrap());
         let api_key = get_env_var(&"AURORA_PLUS_API_KEY".to_string()).unwrap();
-        let url = format!("{}", rpc_url);
+        let url = format!("{}{}", rpc_url, api_key);
         let full_db_path = get_full_db_path().unwrap();
         let network = get_env_var(&"NETWORK_NAME".to_string()).unwrap();
         let chain_id = get_chain_id(&network).unwrap().to_string();
