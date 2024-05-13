@@ -3,7 +3,7 @@ name: Test Suite
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
 
 jobs:
@@ -23,23 +23,18 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Clone DB repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: aurora-is-near/relayer-test-data-generator
           ssh-key: ${{ secrets.SSH_RELAYER_TEST_DATA_GENERATOR }}
           path: relayer-test-data-generator
           ref: main
 
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+
       - name: Install junit-report
         run: |
           cargo install cargo2junit
-
-      - name: rust update
-        run: |
-          rustup default nightly
-          rustup override set nightly
-          rustc --version
-          rustup show
 
       - name: build
         run: |
