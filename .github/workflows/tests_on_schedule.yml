@@ -15,29 +15,21 @@ jobs:
       NETWORK_NAME: ${{secrets.NETWORK_NAME}}
       DATADOG_API_KEY: ${{ secrets.DATADOG_API_KEY }}
     steps:
-      - name: Adding repo directory
-        run: |
-          /usr/bin/git config --global --add safe.directory /root/privileged_runners_workdir/runners/Aurora-Priv-GH-runner-2/aurora-api-testing-rs/aurora-api-testing-rs/relayer-test-data-generator
       - name: Clone the repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Clone DB repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: aurora-is-near/relayer-test-data-generator
           ssh-key: ${{ secrets.SSH_RELAYER_TEST_DATA_GENERATOR }}
           path: relayer-test-data-generator
           ref: main
 
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+
       - name: Install junit-report
         run: |
           cargo install cargo2junit
-
-      - name: rust update
-        run: |
-          rustup default nightly
-          rustup override set nightly
-          rustc --version
-          rustup show
 
       - name: Run tests
         continue-on-error: true
