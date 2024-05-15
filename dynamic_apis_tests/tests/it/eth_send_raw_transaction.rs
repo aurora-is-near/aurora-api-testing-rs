@@ -29,8 +29,10 @@ async fn test_eth_send_raw_transaction_increment() -> anyhow::Result<()> {
         .get_test_data_content_by_group_index(0, "destination_private_key".to_string())
         .unwrap();
     // deploy
-    let abi = utils::read_abi_from_json_file("tests/abis/incrementer.json").unwrap();
-    let bytecode = utils::read_bytes_from_file("tests/abis/incrementer.bytecode").unwrap();
+    let abi =
+        utils::read_abi_from_json_file("dynamic_apis_tests/tests/abis/incrementer.json").unwrap();
+    let bytecode =
+        utils::read_bytes_from_file("dynamic_apis_tests/tests/abis/incrementer.bytecode").unwrap();
     let contract = SmartContract::new(abi.clone(), bytecode.clone());
     let signer_wallet = SignerWallet::new(
         &configs.rpc_url,
@@ -94,8 +96,9 @@ async fn test_eth_send_raw_transaction_wtm() -> anyhow::Result<()> {
         .get_test_data_content_by_group_index(1, "destination_address".to_string())
         .unwrap();
     // deploy
-    let abi = utils::read_abi_from_json_file("tests/abis/watermelonToken.json").unwrap();
-    let bytecode = utils::read_bytes_from_file("tests/abis/watermelonToken.bytecode").unwrap();
+    let abi = utils::read_abi_from_json_file("dynamic_apis_tests/tests/abis/watermelonToken.json")?;
+    let bytecode =
+        utils::read_bytes_from_file("dynamic_apis_tests/tests/abis/watermelonToken.bytecode")?;
     let contract = SmartContract::new(abi.clone(), bytecode.clone());
     let signer_wallet = SignerWallet::new(
         &configs.rpc_url,
