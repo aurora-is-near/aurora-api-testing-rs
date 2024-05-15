@@ -33,7 +33,7 @@ async fn test_eth_get_transaction_count() -> anyhow::Result<()> {
     let res = response.unwrap();
     let z_nonce = i64::from_str_radix(&res[2..res.len()], 16).unwrap();
     info!("Nonce: {:?}", z_nonce);
-    let mut last_nonce = 0;
+    // let mut last_nonce = 0;
     for group_id in 1..task.data_groups.len() {
         let receipt: String = task
             .get_test_data_content_by_group_index(group_id, "receipt".to_string())
@@ -48,7 +48,7 @@ async fn test_eth_get_transaction_count() -> anyhow::Result<()> {
         info!("Nonce: {:?}", nonce);
         let result = nonce.cmp(&z_nonce);
         assert_eq!(Ordering::Greater, result);
-        last_nonce = nonce;
+        // last_nonce = nonce;
     }
     info!("Asserting pending nonce is equal to the latest nonce");
     let params = rpc_params![account_address, "latest"];

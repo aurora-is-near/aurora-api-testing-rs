@@ -13,3 +13,4 @@ Cargo.lock
 .idea/
 .env
 relayer-test-data-generator/
+results.xml

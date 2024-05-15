@@ -37,7 +37,7 @@ async fn test_eth_gas_price() -> anyhow::Result<()> {
             .unwrap()
             .cmp(&0); // result should be > zero
         assert_eq!(Ordering::Greater, res);
-        info!("Aurora plus response: {}", gas_price_aurora);
+        info!("Aurora response: {}", gas_price_aurora);
     } else {
         let params = rpc_params![];
         let response_aurora_plus: Result<String, _> =
