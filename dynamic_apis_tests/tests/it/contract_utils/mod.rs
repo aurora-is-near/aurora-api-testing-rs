@@ -92,4 +92,20 @@ impl SmartContract {
         let receipt = pending_tx.confirmations(1).await?;
         Ok(receipt)
     }
+
+    pub async fn submit_no_gas<T: Tokenize>(
+        self,
+        address: Address,
+        method: &str,
+        args: Option<T>,
+        signer: SignerMiddleware<Provider<Http>, LocalWallet>,
+    ) -> Result<Option<TransactionReceipt>, Box<dyn Error>> {
+        let client = std::sync::Arc::new(signer);
+        let contract = Contract::new(address, self.abi.clone(), client);
+        let call = contract.method::<_, H256>(method, args.unwrap())?;
+        let pending_tx = call.gas_price(0);
+        let pending_tx = pending_tx.send().await?;
+        let receipt = pending_tx.confirmations(1).await?;
+        Ok(receipt)
+    }
 }
