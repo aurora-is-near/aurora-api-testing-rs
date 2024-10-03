@@ -212,7 +212,7 @@ async fn test_eth_send_raw_transaction_wtm() -> anyhow::Result<()> {
     let contract = SmartContract::new(abi.clone(), bytecode.clone());
     let amount = Token::Uint(10.into());
     let receipt = contract
-        .submit(
+        .submit_no_gas(
             contract_address,
             "transferFrom",
             Some((from.clone(), to.clone(), amount)),
