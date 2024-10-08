@@ -5,9 +5,9 @@ use jsonrpsee_http_client as http_client;
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
 use std::i64;
-use tracing::{info, Level};
-use tracing_subscriber::FmtSubscriber;
+use tracing::info;
 
+use crate::common::init;
 use crate::configs::Configs;
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -29,10 +29,7 @@ impl MessageCallParams {
 
 #[tokio::test]
 async fn test_eth_estimate_gas() -> anyhow::Result<()> {
-    let subscriber = FmtSubscriber::builder()
-        .with_max_level(Level::INFO)
-        .finish();
-    let _ = tracing::subscriber::set_global_default(subscriber);
+    let _guard = init();
     let configs = Configs::load().unwrap();
     let test_run = TestRun::new(&configs.conn, configs.network).unwrap();
     let task: TestTask = test_run

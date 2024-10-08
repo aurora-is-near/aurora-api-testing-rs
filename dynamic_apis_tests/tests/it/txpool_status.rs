@@ -1,12 +1,10 @@
-use tracing::{info, Level};
-use tracing_subscriber::FmtSubscriber;
+use tracing::info;
+
+use crate::common::init;
 
 #[tokio::test]
 async fn test_txpool_status() -> anyhow::Result<()> {
-    let subscriber = FmtSubscriber::builder()
-        .with_max_level(Level::INFO)
-        .finish();
-    let _t = tracing::subscriber::set_global_default(subscriber);
+    let _guard = init();
     info!("txpool_status is not supported in Aurora");
     Ok(())
 }

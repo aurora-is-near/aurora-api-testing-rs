@@ -2,10 +2,12 @@ use jsonrpsee_core::client::ClientT;
 use jsonrpsee_core::rpc_params;
 use jsonrpsee_http_client as http_client;
 
+use crate::common::init;
 use crate::configs::Configs;
 
 #[tokio::test]
 async fn test_web3_client_version() -> anyhow::Result<()> {
+    let _guard = init();
     let configs = Configs::load().unwrap();
     let client = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
     let params = rpc_params![];

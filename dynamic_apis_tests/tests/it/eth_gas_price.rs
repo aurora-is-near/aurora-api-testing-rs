@@ -4,19 +4,16 @@ use jsonrpsee_core::rpc_params;
 use jsonrpsee_http_client as http_client;
 use std::cmp::Ordering;
 use std::i64;
-use tracing::{info, Level};
-use tracing_subscriber::FmtSubscriber;
+use tracing::info;
 
+use crate::common::init;
 use crate::configs::Configs;
 
 use crate::utils::hex_string_to_i64;
 
 #[tokio::test]
 async fn test_eth_gas_price() -> anyhow::Result<()> {
-    let subscriber = FmtSubscriber::builder()
-        .with_max_level(Level::INFO)
-        .finish();
-    let _ = tracing::subscriber::set_global_default(subscriber);
+    let _guard = init();
     let configs = Configs::load().unwrap();
     let client_aurora_plus = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
     let aurora_rpc_url = format!("{}", get_env_var(&"RPC_URL".to_string()).unwrap());

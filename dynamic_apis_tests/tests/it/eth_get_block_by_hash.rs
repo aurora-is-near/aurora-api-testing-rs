@@ -3,18 +3,15 @@ use dao::dao::models::{TestRun, TestTask};
 use jsonrpsee_core::client::ClientT;
 use jsonrpsee_core::rpc_params;
 use jsonrpsee_http_client as http_client;
-use tracing::{info, Level};
-use tracing_subscriber::FmtSubscriber;
+use tracing::info;
 
+use crate::common::init;
 use crate::configs::Configs;
 
 #[tokio::test]
 async fn test_eth_get_block_by_hash() -> anyhow::Result<()> {
+    let _guard = init();
     let configs = Configs::load().unwrap();
-    let subscriber = FmtSubscriber::builder()
-        .with_max_level(Level::INFO)
-        .finish();
-    let _ = tracing::subscriber::set_global_default(subscriber);
     let test_run = TestRun::new(&configs.conn, configs.network).unwrap();
     let task: TestTask = test_run
         .filter_tasks_with_limit_one("transferNtimes".to_string())
