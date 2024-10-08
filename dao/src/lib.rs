@@ -8,8 +8,8 @@ mod tests {
     use crate::dao::models::{get_db_connection, TestRun, TestTask};
     use crate::utils::utils::{get_env_var, get_full_db_path, load_env_file};
     use std::cmp::Ordering;
-    use tracing::{debug, Level};
-    use tracing_subscriber::FmtSubscriber;
+    // use tracing::{debug, Level};
+    // use tracing_subscriber::FmtSubscriber;
 
     #[test]
     fn it_loads_env_file() {
