@@ -13,4 +13,8 @@ Cargo.lock
 .idea/
 .env
 relayer-test-data-generator/
+
+# Generated artifacts from tests
+results.json
 results.xml
+test.log
