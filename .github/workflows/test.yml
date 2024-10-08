@@ -46,9 +46,11 @@ jobs:
           cp .env.example .env
           source .env
           export AURORA_PLUS_API_KEY=${{secrets.AURORA_PLUS_API_KEY}}
-          RUSTC_BOOTSTRAP=1 cargo test -- -Z unstable-options --format json --report-time 2> test.log | tee results.json
+          cargo test -- -Z unstable-options --format json --report-time 2> test.log | tee results.json
           cat results.json | cargo2junit > results.xml
-          cat test.log
+
+      - name: Log
+        run: cat test.log
 
       - name: Upload results
         run: |
