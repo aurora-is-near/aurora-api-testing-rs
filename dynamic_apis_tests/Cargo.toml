@@ -7,7 +7,7 @@ authors.workspace = true
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-dao = { path = "../dao", default-features = false}
+dao = { path = "../dao", default-features = false }
 anyhow.workspace = true
 jsonrpsee-http-client.workspace = true
 jsonrpsee-ws-client.workspace = true

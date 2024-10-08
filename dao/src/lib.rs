@@ -8,8 +8,8 @@ mod tests {
     use crate::dao::models::{get_db_connection, TestRun, TestTask};
     use crate::utils::utils::{get_env_var, get_full_db_path, load_env_file};
     use std::cmp::Ordering;
-    use tracing::{debug, Level};
-    use tracing_subscriber::FmtSubscriber;
+    // use tracing::{debug, Level};
+    // use tracing_subscriber::FmtSubscriber;
 
     #[test]
     fn it_loads_env_file() {
@@ -41,10 +41,10 @@ mod tests {
             .filter_tasks_with_limit_one(task_type.clone())
             .unwrap();
         assert_eq!(task.task_type, task_type);
-        debug!(
-            "{}, {}, {}, {}, {}",
-            task.db_id, task.task_type, task.parameters, task.begin, task.end
-        );
+        // debug!(
+        //     "{}, {}, {}, {}, {}",
+        //     task.db_id, task.task_type, task.parameters, task.begin, task.end
+        // );
         let data_contents: Vec<String> = task
             .get_test_data_content_array("receipt".to_string())
             .unwrap();
@@ -71,15 +71,15 @@ mod tests {
             .get_test_data_content_array("receipt".to_string())
             .unwrap();
         let number_of_data_contents = data_contents.len();
-        let subscriber = FmtSubscriber::builder()
-            .with_max_level(Level::TRACE)
-            .finish();
-        tracing::subscriber::set_global_default(subscriber)
-            .expect("setting default subscriber failed");
+        // let subscriber = FmtSubscriber::builder()
+        //     .with_max_level(Level::TRACE)
+        //     .finish();
+        // tracing::subscriber::set_global_default(subscriber)
+        //     .expect("setting default subscriber failed");
         // debug!("{}", data_contents[0]);
         let receipts = TransactionReceipt::load(data_contents).unwrap();
         // debug!("{:?}", receipts[0].events[0].args);
-        debug!("Number of receipts: {:?}", receipts.len());
+        // debug!("Number of receipts: {:?}", receipts.len());
         let number_of_receipts = receipts.len();
         let result = number_of_receipts.cmp(&0);
         assert_eq!(Ordering::Greater, result);

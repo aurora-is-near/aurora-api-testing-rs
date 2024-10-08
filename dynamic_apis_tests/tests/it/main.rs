@@ -1,4 +1,5 @@
 mod aurora_transaction_receipt;
+mod common;
 mod configs;
 mod contract_utils;
 mod eth_accounts;

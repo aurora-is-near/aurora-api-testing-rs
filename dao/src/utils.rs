@@ -5,6 +5,7 @@ pub mod utils {
 
     const MAINNET_AURORA_CHAIN_ID: i64 = 1313161554;
     const TESTNET_AURORA_CHAIN_ID: i64 = 1313161555;
+    const SEPOLIA_CHAIN_ID: i64 = 11155111;
     const ROPSTEN_CHAIN_ID: i64 = 3;
     const GOERLI_CHAIN_ID: i64 = 5;
 
@@ -32,6 +33,7 @@ pub mod utils {
 
     pub fn get_chain_id(network_name: &str) -> Option<i64> {
         match network_name {
+            "sepolia" => Some(SEPOLIA_CHAIN_ID),
             "ropsten" => Some(ROPSTEN_CHAIN_ID),
             "goerli" => Some(GOERLI_CHAIN_ID),
             "testnet_aurora_plus" => Some(TESTNET_AURORA_CHAIN_ID),
@@ -48,6 +50,7 @@ pub mod utils {
     pub fn get_client_version(network_name: &str) -> Option<String> {
         static AURORA_WEB3_CLIENT_VERSION: &str = "Aurora";
         match network_name {
+            "sepolia" => Some(AURORA_WEB3_CLIENT_VERSION.to_string()),
             "ropsten" => Some("erigon/2022.99.99/linux-amd64/go1.18.3".to_string()), // https://rpc.ankr.com/eth_ropsten
             "goerli" => Some("Geth/v1.10.23-omnibus-b38477ec/linux-amd64/go1.18.5".to_string()), // infura
             "testnet_aurora_plus" => Some(AURORA_WEB3_CLIENT_VERSION.to_string()),
@@ -63,6 +66,7 @@ pub mod utils {
 
     pub fn get_protocol_version(network: &str) -> Option<i32> {
         match network {
+            "sepolia" => Some(65),
             "ropsten" => Some(0), // this one is unknown!
             "goerli" => Some(65),
             "testnet_aurora_plus" => Some(65),         // 0x41

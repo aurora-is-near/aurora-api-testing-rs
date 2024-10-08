@@ -1,19 +1,15 @@
 use jsonrpsee_core::client::ClientT;
 use jsonrpsee_core::rpc_params;
 use jsonrpsee_http_client as http_client;
-use tracing::Level;
-use tracing_subscriber::FmtSubscriber;
 
+use crate::common::init;
 use crate::configs::Configs;
 
 use crate::utils::hex_string_to_i32;
 
 #[tokio::test]
 async fn test_net_version() -> anyhow::Result<()> {
-    let subscriber = FmtSubscriber::builder()
-        .with_max_level(Level::INFO)
-        .finish();
-    let _t = tracing::subscriber::set_global_default(subscriber);
+    let _guard = init();
     let configs = Configs::load().unwrap();
     let client = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
     let mut params = rpc_params![];
