@@ -26,12 +26,12 @@ pub fn get_absolute_path(relative_path: &str) -> Option<PathBuf> {
 
 pub fn read_bytes_from_file(file: &str) -> Result<Bytes, AbiError> {
     let bytecode_path = get_absolute_path(file).unwrap();
-    let bytecode_text = std::fs::read_to_string(&bytecode_path).unwrap();
+    let bytecode_text = std::fs::read_to_string(bytecode_path).unwrap();
     Ok(Bytes::from_str(&bytecode_text).unwrap())
 }
 
 pub fn read_abi_from_json_file(file: &str) -> Result<Abi, SerdeError> {
     let abi_path = get_absolute_path(file).unwrap();
-    let abi_text = std::fs::read_to_string(&abi_path).unwrap();
+    let abi_text = std::fs::read_to_string(abi_path).unwrap();
     serde_json::from_str(&abi_text)
 }
