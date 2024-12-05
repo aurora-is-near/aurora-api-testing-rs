@@ -1,0 +1,14 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: aurora-api-testing-rs
+  description: Implements a Rust client for testing Aurora's relayer.
+  tags:
+    - library
+  annotations:
+    aurora.dev/security-tier: "3"
+
+spec:
+  type: library
+  owner: security
+  lifecycle: production
