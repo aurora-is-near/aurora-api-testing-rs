@@ -1,5 +1,5 @@
-use dao::dao::helpers::{Transaction, TransactionReceipt};
-use dao::dao::models::{TestRun, TestTask};
+use dao::helpers::{Transaction, TransactionReceipt};
+use dao::models::{TestRun, TestTask};
 use jsonrpsee_core::client::ClientT;
 use jsonrpsee_core::rpc_params;
 use jsonrpsee_http_client as http_client;
@@ -59,7 +59,7 @@ async fn test_eth_get_transaction_by_block_hash_and_index() -> anyhow::Result<()
         let response: Result<Option<Transaction>, _> = client
             .request("eth_getTransactionByBlockHashAndIndex", params)
             .await;
-        assert_eq!(response.unwrap().is_none(), true);
+        assert!(response.unwrap().is_none());
     }
     Ok(())
 }

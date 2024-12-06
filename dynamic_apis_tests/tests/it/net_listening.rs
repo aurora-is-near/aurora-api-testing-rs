@@ -13,6 +13,6 @@ async fn test_net_listening() -> anyhow::Result<()> {
     let params = rpc_params![];
     let response: Result<bool, _> = client.request("net_listening", params).await;
     let result = response.unwrap();
-    assert_eq!(result, true);
+    assert!(result);
     Ok(())
 }

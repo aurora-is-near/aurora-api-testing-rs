@@ -1,10 +1,9 @@
-use dao::dao::helpers::TransactionReceipt;
-use dao::dao::models::{TestRun, TestTask};
+use dao::helpers::TransactionReceipt;
+use dao::models::{TestRun, TestTask};
 use jsonrpsee_core::client::ClientT;
 use jsonrpsee_core::rpc_params;
 use jsonrpsee_http_client as http_client;
 use std::cmp::Ordering;
-use std::i64;
 use tracing::info;
 
 use crate::common::init;
@@ -29,7 +28,7 @@ async fn test_eth_block_number() -> anyhow::Result<()> {
         let block_number = response.unwrap();
         let len = block_number.len();
         let live_block_number = i64::from_str_radix(&block_number[2..len], 16).unwrap();
-        let receipt_block_number = receipts[i].block_number as i64;
+        let receipt_block_number = i64::from(receipts[i].block_number);
         let result = live_block_number.cmp(&receipt_block_number);
         info!(receipt_block_number, live_block_number);
         assert_eq!(Ordering::Greater, result);

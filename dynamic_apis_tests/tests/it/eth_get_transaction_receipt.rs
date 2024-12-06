@@ -1,16 +1,14 @@
-use dao::dao::helpers::TransactionReceipt;
-use dao::dao::models::{TestRun, TestTask};
+use dao::helpers::{Address, TransactionReceipt};
+use dao::models::{TestRun, TestTask};
 use jsonrpsee_core::client::ClientT;
 use jsonrpsee_core::rpc_params;
 use jsonrpsee_http_client as http_client;
+use serde::{Deserialize, Serialize};
 use tracing::info;
 
 use crate::common::init;
 use crate::configs::Configs;
-
 use crate::utils::hex_string_to_i32;
-
-use crate::aurora_transaction_receipt::AuroraTransactionReceipt;
 
 #[tokio::test]
 async fn test_eth_get_transaction_receipt() -> anyhow::Result<()> {
@@ -100,4 +98,37 @@ async fn test_eth_get_transaction_receipt() -> anyhow::Result<()> {
         }
     }
     Ok(())
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all(serialize = "snake_case", deserialize = "camelCase"))]
+pub struct Log {
+    pub transaction_index: String,
+    pub block_number: String,
+    pub transaction_hash: String,
+    pub address: String,
+    pub topics: Vec<String>,
+    pub data: String,
+    pub log_index: String,
+    pub block_hash: String,
+    pub removed: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all(serialize = "snake_case", deserialize = "camelCase"))]
+pub struct AuroraTransactionReceipt {
+    pub from: Address,
+    pub to: Address,
+    pub contract_address: Option<Address>,
+    pub transaction_index: String,
+    pub gas_used: String,
+    pub logs_bloom: String,
+    pub block_hash: String,
+    pub transaction_hash: String,
+    pub logs: Vec<Log>,
+    pub block_number: String,
+    pub cumulative_gas_used: String,
+    pub status: String,
+    pub near_receipt_hash: String,
+    pub near_transaction_hash: String,
 }

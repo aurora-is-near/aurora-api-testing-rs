@@ -24,7 +24,7 @@ async fn test_eth_submit_hash_rate() -> anyhow::Result<()> {
             Err(error) => error.to_string(),
         };
         // info!("{}", result);
-        assert_eq!(result.contains("method not supported"), true);
+        assert!(result.contains("method not supported"));
     } else if configs.rpc_url.clone().contains("goerli") {
         let goerli_responses = [
             "the method eth_SubmitHashRate does not exist",

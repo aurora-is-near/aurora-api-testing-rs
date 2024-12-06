@@ -1,14 +1,12 @@
-use dao::utils::utils::get_env_var;
+use dao::utils::get_env_var;
 use jsonrpsee_core::client::ClientT;
 use jsonrpsee_core::rpc_params;
 use jsonrpsee_http_client as http_client;
 use std::cmp::Ordering;
-use std::i64;
 use tracing::info;
 
 use crate::common::init;
 use crate::configs::Configs;
-
 use crate::utils::hex_string_to_i64;
 
 #[tokio::test]
@@ -16,7 +14,7 @@ async fn test_eth_gas_price() -> anyhow::Result<()> {
     let _guard = init();
     let configs = Configs::load().unwrap();
     let client_aurora_plus = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
-    let aurora_rpc_url = format!("{}", get_env_var(&"RPC_URL".to_string()).unwrap());
+    let aurora_rpc_url = get_env_var("RPC_URL").unwrap().to_string();
     let client_aurora = http_client::HttpClientBuilder::default().build(aurora_rpc_url.clone())?;
     if aurora_rpc_url.clone().contains("aurora") {
         let mut params = rpc_params![];

@@ -12,6 +12,6 @@ async fn test_eth_syncing() -> anyhow::Result<()> {
     let client = http_client::HttpClientBuilder::default().build(configs.rpc_url)?;
     let params = rpc_params![];
     let response: Result<bool, _> = client.request("eth_syncing", params).await;
-    assert_eq!(response.unwrap(), false);
+    assert!(!response.unwrap());
     Ok(())
 }

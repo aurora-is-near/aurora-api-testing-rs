@@ -13,6 +13,6 @@ async fn test_eth_mining() -> anyhow::Result<()> {
     let params = rpc_params![];
     let response: Result<bool, _> = client.request("eth_mining", params).await;
     let result = response.unwrap();
-    assert_eq!(result, false);
+    assert!(!result);
     Ok(())
 }
