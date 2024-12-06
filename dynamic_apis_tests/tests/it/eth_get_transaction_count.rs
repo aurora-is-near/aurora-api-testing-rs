@@ -1,10 +1,9 @@
-use dao::dao::helpers::TransactionReceipt;
-use dao::dao::models::{TestRun, TestTask};
+use dao::helpers::TransactionReceipt;
+use dao::models::{TestRun, TestTask};
 use jsonrpsee_core::client::ClientT;
 use jsonrpsee_core::rpc_params;
 use jsonrpsee_http_client as http_client;
 use std::cmp::Ordering;
-use std::i64;
 use tracing::info;
 
 use crate::common::init;
@@ -23,7 +22,7 @@ async fn test_eth_get_transaction_count() -> anyhow::Result<()> {
         .get_test_data_content_by_group_index(0, "receipt".to_string())
         .unwrap();
     let transactions = TransactionReceipt::load(vec![receipt]).unwrap();
-    let account_address = transactions[0].from.clone();
+    let account_address = transactions[0].from;
     let n_zero_block_number = transactions[0].block_number;
     let params = rpc_params![account_address, n_zero_block_number];
     let response: Result<String, _> = client.request("eth_getTransactionCount", params).await;
@@ -36,7 +35,7 @@ async fn test_eth_get_transaction_count() -> anyhow::Result<()> {
             .get_test_data_content_by_group_index(group_id, "receipt".to_string())
             .unwrap();
         let transactions = TransactionReceipt::load(vec![receipt]).unwrap();
-        let account_address = transactions[0].from.clone();
+        let account_address = transactions[0].from;
         let block_number = transactions[0].block_number;
         let params = rpc_params![account_address, block_number];
         let response: Result<String, _> = client.request("eth_getTransactionCount", params).await;

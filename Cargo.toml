@@ -1,5 +1,6 @@
 [workspace]
 members = ["dao", "dynamic_apis_tests"]
+resolver = "2"
 exclude = ["target"]
 
 [workspace.package]

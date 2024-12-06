@@ -1,4 +1,4 @@
-use dao::dao::models::{TestRun, TestTask};
+use dao::models::{TestRun, TestTask};
 use jsonrpsee_core::client::ClientT;
 use jsonrpsee_core::rpc_params;
 use jsonrpsee_http_client as http_client;

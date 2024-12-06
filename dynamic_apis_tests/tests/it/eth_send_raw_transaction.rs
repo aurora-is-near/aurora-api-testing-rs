@@ -1,7 +1,11 @@
-use dao::dao::models::{TestRun, TestTask};
-use ethers_core::abi::Token;
-use ethers_core::types::Address;
+use dao::helpers::SerdeError;
+use dao::models::{TestRun, TestTask};
+use ethers_core::abi::{Abi, AbiError, Token};
+use ethers_core::types::{Address, Bytes};
 use serial_test::serial;
+use std::env;
+use std::path::{Path, PathBuf};
+use std::str::FromStr;
 use tracing::info;
 
 extern crate serde;
@@ -11,7 +15,6 @@ extern crate serde_json;
 use crate::common::init;
 use crate::configs::Configs;
 use crate::contract_utils::{SignerWallet, SmartContract};
-use crate::utils;
 
 #[tokio::test]
 #[serial]
@@ -26,8 +29,8 @@ async fn test_eth_send_raw_transaction_increment() -> anyhow::Result<()> {
         .get_test_data_content_by_group_index(0, "destination_private_key".to_string())
         .unwrap();
     // deploy
-    let abi = utils::read_abi_from_json_file("tests/abis/incrementer.json").unwrap();
-    let bytecode = utils::read_bytes_from_file("tests/abis/incrementer.bytecode").unwrap();
+    let abi = read_abi_from_json_file("tests/abis/incrementer.json").unwrap();
+    let bytecode = read_bytes_from_file("tests/abis/incrementer.bytecode").unwrap();
     let contract = SmartContract::new(abi.clone(), bytecode.clone());
     let signer_wallet = SignerWallet::new(
         &configs.rpc_url,
@@ -88,8 +91,8 @@ async fn test_eth_send_raw_transaction_wtm() -> anyhow::Result<()> {
         .get_test_data_content_by_group_index(1, "destination_address".to_string())
         .unwrap();
     // deploy
-    let abi = utils::read_abi_from_json_file("tests/abis/watermelonToken.json").unwrap();
-    let bytecode = utils::read_bytes_from_file("tests/abis/watermelonToken.bytecode").unwrap();
+    let abi = read_abi_from_json_file("tests/abis/watermelonToken.json").unwrap();
+    let bytecode = read_bytes_from_file("tests/abis/watermelonToken.bytecode").unwrap();
     let contract = SmartContract::new(abi.clone(), bytecode.clone());
     let signer_wallet = SignerWallet::new(
         &configs.rpc_url,
@@ -119,7 +122,7 @@ async fn test_eth_send_raw_transaction_wtm() -> anyhow::Result<()> {
         .submit(
             contract_address,
             "transfer",
-            Some((Token::Address(receiver.clone()), Token::Uint(10.into()))),
+            Some((Token::Address(receiver), Token::Uint(10.into()))),
             signer,
         )
         .await
@@ -133,7 +136,7 @@ async fn test_eth_send_raw_transaction_wtm() -> anyhow::Result<()> {
         .call::<_, i32>(
             contract_address,
             "balanceOf",
-            Some(Token::Address(receiver.clone())),
+            Some(Token::Address(receiver)),
             signer.clone(),
         )
         .await
@@ -162,8 +165,8 @@ async fn test_eth_send_raw_transaction_wtm() -> anyhow::Result<()> {
     // approve
     let signer = signer_wallet.create().unwrap();
     let contract = SmartContract::new(abi.clone(), bytecode.clone());
-    let to = Token::Address(receiver.clone());
-    let from = Token::Address(signer.address().clone());
+    let to = Token::Address(receiver);
+    let from = Token::Address(signer.address());
     let amount = Token::Uint(10.into());
     let receipt = contract
         .submit(
@@ -182,10 +185,7 @@ async fn test_eth_send_raw_transaction_wtm() -> anyhow::Result<()> {
         .call::<_, i32>(
             contract_address,
             "allowance",
-            Some((
-                Token::Address(signer.address().clone()),
-                Token::Address(receiver.clone()),
-            )),
+            Some((Token::Address(signer.address()), Token::Address(receiver))),
             signer.clone(),
         )
         .await
@@ -235,4 +235,23 @@ async fn test_eth_send_raw_transaction_wtm() -> anyhow::Result<()> {
     //TODO: check failed transferFrom tx
     //assert_eq!(balance, 20);
     Ok(())
+}
+
+pub fn get_absolute_path(relative_path: &str) -> Option<PathBuf> {
+    Some(Path::join(
+        env::current_dir().unwrap().as_path(),
+        Path::new(relative_path).to_str().unwrap(),
+    ))
+}
+
+pub fn read_bytes_from_file(file: &str) -> Result<Bytes, AbiError> {
+    let bytecode_path = get_absolute_path(file).unwrap();
+    let bytecode_text = std::fs::read_to_string(&bytecode_path).unwrap();
+    Ok(Bytes::from_str(&bytecode_text).unwrap())
+}
+
+pub fn read_abi_from_json_file(file: &str) -> Result<Abi, SerdeError> {
+    let abi_path = get_absolute_path(file).unwrap();
+    let abi_text = std::fs::read_to_string(&abi_path).unwrap();
+    serde_json::from_str(&abi_text)
 }

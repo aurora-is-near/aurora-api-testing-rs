@@ -44,7 +44,7 @@ async fn test_eth_uninstall_filter() -> anyhow::Result<()> {
     let params = rpc_params![filter_id];
     let response: Result<bool, _> = client.request("eth_uninstallFilter", params).await;
     let status = response.unwrap();
-    assert_eq!(status, true);
+    assert!(status);
     info!("eth_uninstallFilter status: {}", status);
     Ok(())
 }

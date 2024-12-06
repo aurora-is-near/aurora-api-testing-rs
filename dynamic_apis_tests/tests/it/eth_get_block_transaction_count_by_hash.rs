@@ -1,11 +1,10 @@
-use dao::dao::helpers::TransactionReceipt;
-use dao::dao::models::{TestRun, TestTask};
+use dao::helpers::TransactionReceipt;
+use dao::models::{TestRun, TestTask};
 use ethereum_types::{H160, H256};
 use jsonrpsee_core::client::ClientT;
 use jsonrpsee_core::rpc_params;
 use jsonrpsee_http_client as http_client;
 use std::cmp::Ordering;
-use std::i64;
 use tracing::info;
 
 use crate::common::init;
@@ -52,7 +51,7 @@ async fn test_eth_get_block_transaction_count_by_hash() -> anyhow::Result<()> {
     if configs.rpc_url.clone().contains("aurora") {
         // assert zero tx_count for invalid block hash format
         let block_hash = H160::from_low_u64_be(0);
-        params = rpc_params![block_hash.clone()];
+        params = rpc_params![block_hash];
         let response: Result<String, _> = client
             .request("eth_getBlockTransactionCountByHash", params)
             .await;

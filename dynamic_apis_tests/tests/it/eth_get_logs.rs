@@ -1,5 +1,5 @@
-use dao::dao::helpers::TransactionReceipt;
-use dao::dao::models::{TestRun, TestTask};
+use dao::helpers::TransactionReceipt;
+use dao::models::{TestRun, TestTask};
 use jsonrpsee_core::client::ClientT;
 use jsonrpsee_core::rpc_params;
 use jsonrpsee_http_client as http_client;
@@ -49,7 +49,7 @@ async fn test_eth_get_logs() -> anyhow::Result<()> {
             .unwrap();
         let transactions = TransactionReceipt::load(vec![receipt]).unwrap();
         for log in &transactions[0].logs {
-            let topics: Vec<String> = log.topics.iter().map(|t| t.clone()).collect();
+            let topics: Vec<String> = log.topics.to_vec();
             let log_filter = LogFilter {
                 topics: vec![topics[0].clone()],
                 address: log.address.to_string(),
@@ -75,9 +75,9 @@ async fn test_eth_get_logs() -> anyhow::Result<()> {
                 // block hash
                 assert_eq!(log_result.block_hash.clone(), log.block_hash.clone());
                 // topics
-                for i in 0..log_result.topics.len() {
+                (0..log_result.topics.len()).for_each(|i| {
                     assert_eq!(log_result.topics[i], topics[i]);
-                }
+                });
                 // log index
                 assert_eq!(
                     hex_string_to_i32(log_result.log_index.clone()),

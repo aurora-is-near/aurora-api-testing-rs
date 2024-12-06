@@ -1,7 +1,8 @@
-mod aurora_transaction_receipt;
 mod common;
 mod configs;
 mod contract_utils;
+mod utils;
+
 mod eth_accounts;
 mod eth_block_number;
 mod eth_call;
@@ -47,6 +48,5 @@ mod parity_pending_transactions;
 mod txpool_content;
 mod txpool_inspect;
 mod txpool_status;
-mod utils;
 mod web3_client_version;
 mod web3_sha3;
