@@ -4,11 +4,11 @@ metadata:
   name: aurora-api-testing-rs
   description: Implements a Rust client for testing Aurora's relayer.
   tags:
-    - library
+    - tests
   annotations:
     aurora.dev/security-tier: "3"
 
 spec:
-  type: library
+  type: service
   owner: security
   lifecycle: production
