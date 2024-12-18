@@ -7,6 +7,7 @@ metadata:
     - tests
   annotations:
     aurora.dev/security-tier: "3"
+    github.com/project-slug: aurora-is-near/aurora-api-testing-rs
 
 spec:
   type: service
