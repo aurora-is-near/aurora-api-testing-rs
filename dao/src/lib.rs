@@ -23,7 +23,7 @@ mod tests {
         assert_eq!(
             vars.get("NETWORK_NAME"),
             Some(&"mainnet_aurora_plus".to_string())
-        )
+        );
     }
 
     #[test]

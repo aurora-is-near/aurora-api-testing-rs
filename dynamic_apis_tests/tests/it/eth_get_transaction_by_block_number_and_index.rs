@@ -51,8 +51,7 @@ async fn test_eth_get_transaction_by_block_number_and_index() -> anyhow::Result<
             .await;
         assert!(
             response.is_err(),
-            "Expected an error response, but got {:?}",
-            response
+            "Expected an error response, but got {response:?}"
         );
         info!("assert no transaction @ invalid transaction index");
         let invalid_transaction_index = 50;

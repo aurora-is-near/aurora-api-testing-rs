@@ -57,8 +57,7 @@ async fn test_eth_get_block_transaction_count_by_hash() -> anyhow::Result<()> {
             .await;
         assert!(
             response.is_err(),
-            "Expected an error response, but got {:?}",
-            response
+            "Expected an error response, but got {response:?}"
         );
     }
     Ok(())

@@ -14,6 +14,8 @@ pub struct TestData {
     pub content: String,
 }
 
+#[allow(clippy::let_and_return)]
+#[allow(clippy::uninlined_format_args)]
 impl TestData {
     pub fn load(conn: &Connection, db_id: i32) -> Result<Vec<TestData>, rusqlite::Error> {
         let test_data_query = format!(
@@ -40,6 +42,8 @@ pub struct TestDataGroup {
     pub data: Vec<TestData>,
 }
 
+#[allow(clippy::needless_pass_by_value)]
+#[allow(clippy::unnecessary_wraps)]
 impl TestDataGroup {
     pub fn load(conn: &Connection, db_id: i32) -> Result<Vec<TestDataGroup>, rusqlite::Error> {
         let test_data: Vec<TestData> = TestData::load(conn, db_id).unwrap();
@@ -78,6 +82,8 @@ pub struct TestTask {
     pub data_groups: Vec<TestDataGroup>,
 }
 
+#[allow(clippy::needless_pass_by_value)]
+#[allow(clippy::uninlined_format_args)]
 impl TestTask {
     pub fn load(conn: &Connection, db_id: i32) -> Result<Vec<TestTask>, rusqlite::Error> {
         let test_tasks_query = format!(
@@ -143,13 +149,14 @@ pub struct TestRun {
     pub tasks: Vec<TestTask>,
 }
 
+#[allow(clippy::needless_pass_by_value)]
+#[allow(clippy::uninlined_format_args)]
 impl TestRun {
     pub fn new(conn: &Connection, network_name: String) -> Result<TestRun, rusqlite::Error> {
         //TODO: use https://github.com/SeaQL/sea-query/ for more user friendly queries formatting
         let test_run_query = format!(
             "SELECT * FROM {} WHERE test_run_network = '{}' ORDER BY test_run_db_id DESC LIMIT 1",
-            RUNS_TABLE,
-            network_name.as_str()
+            RUNS_TABLE, network_name
         )
         .clone();
         debug!("Selecting test runs: {}", test_run_query);
