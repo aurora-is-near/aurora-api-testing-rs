@@ -13,6 +13,7 @@ pub struct Configs {
     pub protocol_version: String,
 }
 
+#[allow(clippy::manual_let_else)]
 impl Configs {
     pub fn load() -> Result<Configs, rusqlite::Error> {
         let rpc_url = match get_env_var("RPC_URL") {

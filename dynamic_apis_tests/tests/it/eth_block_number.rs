@@ -9,6 +9,7 @@ use tracing::info;
 use crate::common::init;
 use crate::configs::Configs;
 
+#[allow(clippy::needless_range_loop)]
 #[tokio::test]
 async fn test_eth_block_number() -> anyhow::Result<()> {
     let _guard = init();

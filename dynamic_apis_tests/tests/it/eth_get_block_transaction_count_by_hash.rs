@@ -10,6 +10,7 @@ use tracing::info;
 use crate::common::init;
 use crate::configs::Configs;
 
+#[allow(clippy::needless_range_loop)]
 #[tokio::test]
 async fn test_eth_get_block_transaction_count_by_hash() -> anyhow::Result<()> {
     let _guard = init();

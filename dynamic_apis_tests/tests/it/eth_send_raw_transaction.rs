@@ -237,6 +237,7 @@ async fn test_eth_send_raw_transaction_wtm() -> anyhow::Result<()> {
     Ok(())
 }
 
+#[allow(clippy::unnecessary_wraps)]
 pub fn get_absolute_path(relative_path: &str) -> Option<PathBuf> {
     Some(Path::join(
         env::current_dir().unwrap().as_path(),
@@ -244,6 +245,7 @@ pub fn get_absolute_path(relative_path: &str) -> Option<PathBuf> {
     ))
 }
 
+#[allow(clippy::unnecessary_wraps)]
 pub fn read_bytes_from_file(file: &str) -> Result<Bytes, AbiError> {
     let bytecode_path = get_absolute_path(file).unwrap();
     let bytecode_text = std::fs::read_to_string(&bytecode_path).unwrap();

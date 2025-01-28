@@ -34,7 +34,7 @@ async fn test_eth_get_storage_at() -> anyhow::Result<()> {
     let response: Result<String, _> = client.request("eth_getStorageAt", params).await;
     let res = response.unwrap();
     let total_supply = i32::from_str_radix(&res[2..res.len()], 16).unwrap();
-    let expected_total_supply = 1000000;
+    let expected_total_supply = 1_000_000;
     info!("Asserting total_supply is {}", total_supply);
     assert_eq!(total_supply, expected_total_supply);
     let expected_token_name = String::from("Watermelon");

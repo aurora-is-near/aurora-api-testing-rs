@@ -100,6 +100,7 @@ async fn test_eth_get_transaction_receipt() -> anyhow::Result<()> {
     Ok(())
 }
 
+#[allow(clippy::struct_field_names)]
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all(serialize = "snake_case", deserialize = "camelCase"))]
 pub struct Log {
