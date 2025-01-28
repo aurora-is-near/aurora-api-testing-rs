@@ -13,21 +13,19 @@ pub struct Configs {
     pub protocol_version: String,
 }
 
+#[allow(clippy::manual_let_else)]
 impl Configs {
     pub fn load() -> Result<Configs, rusqlite::Error> {
         let rpc_url = match get_env_var("RPC_URL") {
             Some(value) => value,
             None => panic!("Environment variable RPC_URL is not set"),
         };
-        let api_key = match get_env_var("AURORA_PLUS_API_KEY") {
-            Some(value) => value,
-            None => "".to_owned(),
-        };
+        let api_key = get_env_var("AURORA_PLUS_API_KEY").unwrap_or_default();
         let network = match get_env_var("NETWORK_NAME") {
             Some(value) => value,
             None => panic!("Environment variable NETWORK_NAME is not set"),
         };
-        let url = format!("{}{}", rpc_url, api_key);
+        let url = format!("{rpc_url}{api_key}");
         let full_db_path = get_full_db_path().unwrap();
         let chain_id = get_chain_id(&network).unwrap().to_string();
         let client_version = get_client_version(&network).unwrap();

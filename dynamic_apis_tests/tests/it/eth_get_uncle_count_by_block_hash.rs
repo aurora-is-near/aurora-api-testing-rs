@@ -10,6 +10,7 @@ use crate::configs::Configs;
 
 use crate::utils::hex_string_to_i32;
 
+#[allow(clippy::needless_range_loop)]
 #[tokio::test]
 async fn test_eth_get_uncle_count_by_block_hash() -> anyhow::Result<()> {
     let _guard = init();

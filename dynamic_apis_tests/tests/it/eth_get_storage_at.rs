@@ -34,7 +34,7 @@ async fn test_eth_get_storage_at() -> anyhow::Result<()> {
     let response: Result<String, _> = client.request("eth_getStorageAt", params).await;
     let res = response.unwrap();
     let total_supply = i32::from_str_radix(&res[2..res.len()], 16).unwrap();
-    let expected_total_supply = 1000000;
+    let expected_total_supply = 1_000_000;
     info!("Asserting total_supply is {}", total_supply);
     assert_eq!(total_supply, expected_total_supply);
     let expected_token_name = String::from("Watermelon");
@@ -50,7 +50,7 @@ async fn test_eth_get_storage_at() -> anyhow::Result<()> {
         hex::decode(&token_name[2..token_name.len()]).expect("Decoding failed");
     let token_name_str = match std::str::from_utf8(&decoded_token_name) {
         Ok(v) => v,
-        Err(e) => panic!("Invalid UTF-8 sequence: {}", e),
+        Err(e) => panic!("Invalid UTF-8 sequence: {e}"),
     };
     info!("Asserting token name is: {:?}", token_name_str);
     assert!(token_name_str.contains(&expected_token_name));
@@ -67,7 +67,7 @@ async fn test_eth_get_storage_at() -> anyhow::Result<()> {
         hex::decode(&token_symbol[2..token_symbol.len()]).expect("Decoding failed");
     let token_symbol_str = match std::str::from_utf8(&decoded_token_symbol) {
         Ok(v) => v,
-        Err(e) => panic!("Invalid UTF-8 sequence: {}", e),
+        Err(e) => panic!("Invalid UTF-8 sequence: {e}"),
     };
     info!("Asserting token symbol is: {:?}", token_symbol_str);
     assert!(token_symbol_str.contains(&expected_token_symbol));

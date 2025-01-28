@@ -38,7 +38,7 @@ async fn test_eth_submit_hash_rate() -> anyhow::Result<()> {
         // info!("{}", result);
         let does_exist: Vec<bool> = goerli_responses
             .iter()
-            .map(|v| result.contains(&v.to_string()))
+            .map(|v| result.contains(&(*v).to_string()))
             .collect();
         info!("Unsupported method ? {:?}", does_exist.contains(&true));
     }
